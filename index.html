@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>حاسبة الحديد | ورشة الهياكل المعدنية</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --primary:#1e3a5f;
+  --primary-dark:#15294a;
+  --primary-deeper:#0d1b33;
+  --primary-light:#2d5a8e;
+  --primary-surface:#eef4fb;
+  --primary-border:#b8cfe8;
+  --accent:#d48c2b;
+  --accent-light:#f5d698;
+  --accent-surface:#fef7ec;
+  --success:#0f7b4a;
+  --success-surface:#ecfdf3;
+  --danger:#b42318;
+  --danger-surface:#fef3f2;
+  --gray-50:#f8fafb;
+  --gray-100:#eef1f5;
+  --gray-200:#d9dfe8;
+  --gray-300:#b5bfcc;
+  --gray-400:#8b97a8;
+  --gray-500:#6b7a8d;
+  --gray-600:#4f5b6c;
+  --gray-700:#384152;
+  --gray-800:#242b38;
+  --gray-900:#13171f;
+  --shadow-xs:0 1px 2px rgba(0,0,0,.04);
+  --shadow-sm:0 1px 3px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.04);
+  --shadow:0 4px 6px rgba(0,0,0,.04),0 2px 4px rgba(0,0,0,.04);
+  --shadow-md:0 10px 15px rgba(0,0,0,.05),0 4px 6px rgba(0,0,0,.04);
+  --shadow-lg:0 20px 25px rgba(0,0,0,.06),0 10px 10px rgba(0,0,0,.03);
+  --shadow-xl:0 25px 50px rgba(0,0,0,.1);
+  --radius-sm:6px;
+  --radius:10px;
+  --radius-lg:16px;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Cairo',system-ui,'Segoe UI',Tahoma,sans-serif;background:var(--gray-50);color:var(--gray-800);line-height:1.7;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+.app{max-width:1260px;margin:0 auto;padding:16px}
+
+/* ===== SIDEBAR LAYOUT ===== */
+.layout{display:flex;gap:0;min-height:calc(100vh - 32px)}
+.sidebar{width:220px;flex-shrink:0;background:linear-gradient(180deg,var(--primary-deeper),var(--primary-dark) 40%,var(--primary) 100%);border-radius:var(--radius-lg);padding:24px 14px;display:flex;flex-direction:column;gap:4px;box-shadow:0 8px 30px rgba(30,58,95,.25);position:sticky;top:16px;max-height:calc(100vh - 32px);overflow-y:auto}
+.sidebar-brand{text-align:center;padding:8px 4px 20px 4px;border-bottom:1px solid rgba(255,255,255,.08);margin-bottom:12px}
+.sidebar-logo{width:52px;height:52px;background:rgba(255,255,255,.12);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.6rem;margin:0 auto 10px;backdrop-filter:blur(4px)}
+.sidebar-brand h1{color:#fff;font-size:.95rem;font-weight:700;letter-spacing:-.01em}
+.sidebar-brand p{color:rgba(255,255,255,.5);font-size:.68rem;font-weight:500;margin-top:2px;line-height:1.4}
+.sidebar-nav{display:flex;flex-direction:column;gap:3px}
+.sidebar-btn{display:flex;align-items:center;gap:10px;padding:10px 14px;border:none;background:transparent;color:rgba(255,255,255,.55);cursor:pointer;border-radius:var(--radius-sm);font-size:.8rem;font-weight:500;font-family:inherit;transition:all .2s;text-align:right;width:100%}
+.sidebar-btn:hover{background:rgba(255,255,255,.07);color:rgba(255,255,255,.8)}
+.sidebar-btn.active{background:rgba(255,255,255,.12);color:#fff;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+.sidebar-btn .icon{font-size:1.1rem;width:24px;text-align:center;flex-shrink:0}
+.sidebar-footer{margin-top:auto;padding-top:16px;border-top:1px solid rgba(255,255,255,.08);display:flex;flex-direction:column;gap:4px}
+.sidebar-footer .sidebar-btn{font-size:.72rem;padding:8px 12px}
+.main{flex:1;min-width:0;padding-right:20px}
+@media(max-width:860px){
+  .layout{flex-direction:column}
+  .sidebar{width:100%;position:static;max-height:none;flex-direction:row;flex-wrap:wrap;padding:12px 16px;border-radius:var(--radius);gap:0}
+  .sidebar-brand{display:none}
+  .sidebar-nav{flex-direction:row;flex-wrap:wrap;flex:1}
+  .sidebar-btn{padding:7px 12px;font-size:.75rem}
+  .sidebar-btn .icon{font-size:.9rem;width:18px}
+  .main{padding-right:0;margin-top:12px}
+}
+
+/* ===== BUTTONS ===== */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:9px 20px;border:none;border-radius:var(--radius-sm);font-size:.8rem;font-weight:600;cursor:pointer;transition:all .2s;text-decoration:none;white-space:nowrap;font-family:inherit;letter-spacing:-.01em}
+.btn:active{transform:scale(.96)}
+.btn-primary{background:var(--primary);color:#fff;box-shadow:0 2px 8px rgba(30,58,95,.2)}
+.btn-primary:hover{background:var(--primary-dark);box-shadow:0 4px 14px rgba(30,58,95,.25);transform:translateY(-1px)}
+.btn-accent{background:var(--accent);color:#fff;box-shadow:0 2px 8px rgba(212,140,43,.25)}
+.btn-accent:hover{background:#c07d1f;box-shadow:0 4px 14px rgba(212,140,43,.3);transform:translateY(-1px)}
+.btn-success{background:var(--success);color:#fff;box-shadow:0 2px 8px rgba(15,123,74,.2)}
+.btn-success:hover{background:#0d6b3f;box-shadow:0 4px 14px rgba(15,123,74,.25);transform:translateY(-1px)}
+.btn-danger{background:var(--danger);color:#fff;box-shadow:0 2px 8px rgba(180,35,24,.18)}
+.btn-danger:hover{background:#9b2d1e;box-shadow:0 4px 14px rgba(180,35,24,.22);transform:translateY(-1px)}
+.btn-outline{background:#fff;border:1.5px solid var(--gray-200);color:var(--gray-600)}
+.btn-outline:hover{background:var(--gray-50);border-color:var(--gray-300)}
+.btn-ghost{background:transparent;border:none;color:var(--gray-500);padding:6px 10px}
+.btn-ghost:hover{background:var(--gray-100);color:var(--gray-700)}
+.btn-sm{padding:6px 14px;font-size:.75rem}
+.btn-xs{padding:3px 8px;font-size:.68rem;border-radius:4px}
+
+/* ===== CARDS ===== */
+.card{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);padding:22px;margin-bottom:16px;border:1px solid var(--gray-100);transition:box-shadow .2s}
+.card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:10px}
+.card-header h2{font-size:1rem;font-weight:700;color:var(--gray-800);display:flex;align-items:center;gap:8px}
+.card-header h2 .badge-dot{width:3px;height:20px;background:var(--primary);border-radius:2px;display:inline-block}
+
+/* ===== TABLES ===== */
+.table-wrap{overflow-x:auto;border-radius:var(--radius-sm);border:1px solid var(--gray-100)}
+table{width:100%;border-collapse:collapse;font-size:.8rem}
+th,td{padding:12px 14px;text-align:right;border-bottom:1px solid var(--gray-50)}
+th{background:var(--gray-50);font-weight:600;color:var(--gray-600);font-size:.73rem;letter-spacing:.01em}
+tr:last-child td{border-bottom:none}
+tbody tr{transition:background .15s}
+tbody tr:hover td{background:var(--primary-surface)}
+tbody tr:nth-child(even) td{background:rgba(30,58,95,.02)}
+tbody tr:nth-child(even):hover td{background:var(--primary-surface)}
+.table-title{font-size:.75rem;font-weight:700;color:var(--gray-400);padding:0 4px 8px 4px;display:flex;gap:12px}
+.table-title span{flex:1;text-align:center}
+
+.empty{text-align:center;padding:48px 20px;color:var(--gray-400)}
+.empty-icon{font-size:2.8rem;margin-bottom:10px;opacity:.5}
+
+/* ===== FORMS ===== */
+.form-group{margin-bottom:16px}
+.form-group label{display:block;font-size:.78rem;font-weight:600;color:var(--gray-700);margin-bottom:5px}
+.form-control{width:100%;padding:10px 14px;border:1.5px solid var(--gray-100);border-radius:var(--radius-sm);font-size:.85rem;transition:all .2s;background:#fff;font-family:inherit;color:var(--gray-800)}
+.form-control:focus{outline:none;border-color:var(--primary-light);box-shadow:0 0 0 3px rgba(45,90,142,.1)}
+.form-control::placeholder{color:var(--gray-400)}
+.form-control-sm{padding:7px 10px;font-size:.8rem}
+select.form-control{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238b97a8' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:left 12px center;background-color:#fff;padding-left:34px}
+.form-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px}
+
+/* ===== TOGGLE ===== */
+.toggle{position:relative;display:inline-block;width:38px;height:22px;flex-shrink:0}
+.toggle input{opacity:0;width:0;height:0}
+.toggle-slider{position:absolute;inset:0;background:var(--gray-200);border-radius:22px;cursor:pointer;transition:.25s}
+.toggle-slider::before{content:'';position:absolute;width:16px;height:16px;border-radius:50%;background:#fff;top:3px;right:3px;transition:.25s;box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.toggle input:checked+.toggle-slider{background:var(--primary)}
+.toggle input:checked+.toggle-slider::before{transform:translateX(16px)}
+
+/* ===== BADGE ===== */
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:999px;font-size:.66rem;font-weight:600;line-height:1.4}
+.badge-primary{background:var(--primary-surface);color:var(--primary)}
+.badge-success{background:var(--success-surface);color:var(--success)}
+.badge-warning{background:var(--accent-surface);color:#92400e}
+.badge-danger{background:var(--danger-surface);color:var(--danger)}
+
+/* ===== MODAL ===== */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(19,23,31,.5);z-index:1000;justify-content:center;align-items:flex-start;padding:50px 16px;overflow-y:auto;backdrop-filter:blur(3px)}
+.modal-overlay.open{display:flex}
+.modal{background:#fff;border-radius:var(--radius-lg);box-shadow:var(--shadow-xl);width:100%;max-width:560px;max-height:85vh;overflow-y:auto;animation:modalIn .25s ease}
+@keyframes modalIn{from{opacity:0;transform:translateY(-20px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+.modal-header{display:flex;justify-content:space-between;align-items:center;padding:18px 22px;border-bottom:1px solid var(--gray-50)}
+.modal-header h3{font-size:.95rem;font-weight:700;color:var(--gray-800)}
+.modal-close{background:none;border:none;font-size:1.5rem;cursor:pointer;color:var(--gray-400);padding:0;line-height:1;width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:var(--radius-sm);transition:.15s}
+.modal-close:hover{background:var(--gray-50);color:var(--gray-600)}
+.modal-body{padding:22px}
+.modal-footer{padding:14px 22px;border-top:1px solid var(--gray-50);display:flex;gap:8px}
+
+/* ===== CALCULATOR ===== */
+.calc-mode-tabs{display:flex;gap:6px;margin-bottom:18px;background:var(--gray-50);padding:4px;border-radius:var(--radius-sm)}
+.calc-mode-tab{padding:9px 22px;border:none;border-radius:var(--radius-sm);background:transparent;cursor:pointer;font-size:.8rem;font-weight:600;color:var(--gray-500);transition:all .2s;font-family:inherit}
+.calc-mode-tab:hover{color:var(--gray-700)}
+.calc-mode-tab.active{background:#fff;color:var(--primary);box-shadow:var(--shadow-sm)}
+.calc-section{border:1.5px solid var(--gray-100);border-radius:var(--radius);padding:18px;margin-bottom:14px;background:var(--gray-50)/30}
+.calc-section-title{font-size:.8rem;font-weight:700;color:var(--gray-600);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.calc-item-row{display:grid;grid-template-columns:1fr 80px 55px 95px 32px;gap:8px;align-items:center;margin-bottom:6px;padding:6px 8px;border-radius:var(--radius-sm);transition:.15s}
+.calc-item-row:hover{background:#fff}
+@media(max-width:640px){.calc-item-row{grid-template-columns:1fr 60px 45px 75px 28px;gap:4px;font-size:.73rem}}
+.calc-cost-row{display:grid;grid-template-columns:1fr 85px 44px 44px 32px;gap:8px;align-items:center;margin-bottom:4px;padding:6px 8px;border-radius:var(--radius-sm);transition:.15s}
+.calc-cost-row:hover{background:#fff}
+@media(max-width:640px){.calc-cost-row{grid-template-columns:1fr 65px 38px 38px 28px;gap:4px}}
+.calc-header-row{font-size:.68rem;font-weight:700;color:var(--gray-400);padding:0 8px 6px 8px;border-bottom:1px solid var(--gray-100);margin-bottom:6px;display:grid;gap:8px}
+.calc-total{background:linear-gradient(135deg,var(--primary-deeper),var(--primary-dark));color:#fff;padding:18px 22px;border-radius:var(--radius);display:flex;justify-content:space-between;align-items:center;font-size:1.1rem;font-weight:800;margin-top:14px;box-shadow:0 4px 16px rgba(30,58,95,.15)}
+.calc-total-sub{background:var(--gray-50);padding:12px 18px;border-radius:var(--radius);display:flex;justify-content:space-between;font-size:.82rem;color:var(--gray-600);font-weight:500;margin-top:8px}
+.calc-actions{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+
+/* ===== QUOTE CARD ===== */
+.quote-card{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow-xs);padding:14px 18px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;border:1px solid var(--gray-100);transition:all .2s}
+.quote-card:hover{box-shadow:var(--shadow);border-color:var(--primary-border)}
+.quote-info{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.quote-actions{display:flex;gap:5px}
+
+/* ===== STATS ===== */
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px}
+.stat-card{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);padding:20px;text-align:center;border:1px solid var(--gray-50);transition:all .2s}
+.stat-card:hover{box-shadow:var(--shadow-md);transform:translateY(-2px)}
+.stat-card .num{font-size:1.7rem;font-weight:800;color:var(--primary);margin-top:4px;letter-spacing:-.02em}
+.stat-card .label{font-size:.77rem;color:var(--gray-500);font-weight:500}
+
+/* ===== STRUCTURE TAG ===== */
+.struct-tag{display:inline-flex;align-items:center;gap:4px;background:var(--gray-50);padding:3px 12px;border-radius:999px;font-size:.74rem;margin:2px 4px 2px 0}
+.struct-tag .dot{color:var(--primary);font-weight:700}
+
+/* ===== INVOICE ===== */
+.invoice{padding:40px;max-width:800px;margin:0 auto;font-family:'Cairo',system-ui,sans-serif}
+.invoice-header{display:flex;justify-content:space-between;margin-bottom:28px;padding-bottom:20px;border-bottom:2px solid var(--gray-100)}
+.invoice-title{font-size:1.5rem;font-weight:800;color:var(--primary-dark)}
+.invoice-sub{font-size:.78rem;color:var(--gray-400);margin-top:4px}
+.invoice table{width:100%;border-collapse:collapse;margin:18px 0;font-size:.8rem}
+.invoice table th,.invoice table td{padding:10px 14px;border:1px solid var(--gray-100);text-align:center}
+.invoice table th{background:var(--primary);color:#fff;font-size:.73rem;font-weight:600}
+.invoice .total-row{font-weight:700;background:var(--primary-surface);font-size:.9rem}
+.invoice-footer{margin-top:28px;padding-top:18px;border-top:1px solid var(--gray-100);display:flex;justify-content:space-between;font-size:.78rem;color:var(--gray-500)}
+@media print{body{background:#fff!important}.modal-overlay{position:static;background:none;padding:0;overflow:visible;display:flex!important}.modal{max-width:100%!important;box-shadow:none;border-radius:0;max-height:none;box-shadow:none!important}.no-print{display:none!important}.app,.layout{display:block!important}.sidebar{display:none!important}.main{padding:0}.invoice{page-break-after:always;padding:10px}.calc-total{break-inside:avoid}}
+
+/* ===== TOAST ===== */
+.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);padding:14px 28px;border-radius:var(--radius-sm);font-size:.8rem;font-weight:600;box-shadow:var(--shadow-xl);z-index:2000;animation:toastIn .35s ease;display:flex;align-items:center;gap:10px;direction:ltr}
+.toast-success{background:var(--success);color:#fff}
+.toast-error{background:var(--danger);color:#fff}
+@keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(20px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+
+/* ===== UTILITIES ===== */
+.hidden{display:none!important}
+.text-muted{color:var(--gray-400);font-size:.78rem}
+input[type=number]{text-align:left}
+input[type=number]::-webkit-inner-spin-button{opacity:.4}
+
+/* ===== MOBILE RESPONSIVE ===== */
+
+/* Tablet & small screens */
+@media(max-width:860px){
+  .sidebar-footer{display:flex!important;flex-direction:row;width:100%;margin-top:8px;padding-top:8px;justify-content:center;flex-wrap:wrap}
+  .sidebar-footer .sidebar-btn{font-size:.68rem;padding:7px 12px}
+  .card-header{gap:8px}
+  .card-header h2{font-size:.9rem}
+  .stat-grid{grid-template-columns:repeat(2,1fr);gap:10px}
+  .stat-card{padding:14px 10px}
+  .stat-card .num{font-size:1.3rem}
+  .form-row{grid-template-columns:1fr}
+  .modal{max-width:95vw!important;margin:0 auto}
+  .modal-body{padding:16px}
+  .modal-header{padding:14px 16px}
+  .modal-footer{padding:12px 16px;flex-wrap:wrap}
+  .invoice{padding:16px}
+  .invoice-header{flex-direction:column;gap:10px;text-align:center}
+  .invoice-header div:last-child{text-align:center!important}
+}
+
+/* Phone screens */
+@media(max-width:480px){
+  .app{padding:8px}
+  .layout{min-height:auto}
+  .sidebar{padding:8px 10px;border-radius:var(--radius-sm)}
+  .sidebar-btn{padding:8px 10px;font-size:.72rem;gap:6px;min-height:38px}
+  .sidebar-btn .icon{font-size:.85rem;width:16px}
+  .sidebar-nav{gap:2px}
+  .sidebar-footer{gap:2px}
+  .card{padding:14px;margin-bottom:10px;border-radius:var(--radius-sm)}
+  .card-header h2{font-size:.85rem}
+  .card-header h2 .badge-dot{height:16px}
+  .table-wrap{border-radius:4px;margin:0 -4px}
+  th,td{padding:8px 6px;font-size:.7rem}
+  .btn{padding:7px 12px;font-size:.73rem;min-height:36px}
+  .btn-sm{padding:5px 10px;font-size:.68rem;min-height:32px}
+  .btn-xs{padding:3px 6px;font-size:.62rem;min-height:28px}
+  .form-control{padding:8px 10px;font-size:.78rem;min-height:38px}
+  .form-control-sm{padding:6px 8px;font-size:.73rem;min-height:34px}
+  .form-group{margin-bottom:10px}
+  .calc-section{padding:12px;margin-bottom:10px}
+  .calc-mode-tabs{gap:4px;padding:3px}
+  .calc-mode-tab{padding:7px 12px;font-size:.73rem}
+  .calc-item-row{padding:4px 4px;margin-bottom:4px}
+  .calc-cost-row{padding:4px 4px}
+  .calc-total{padding:14px 16px;font-size:1rem;margin-top:10px}
+  .calc-total-sub{padding:10px 14px;font-size:.76rem}
+  .calc-header-row{font-size:.6rem;padding:0 4px 4px 4px}
+  .stat-grid{gap:8px}
+  .stat-card{padding:12px 8px}
+  .stat-card .num{font-size:1.15rem}
+  .stat-card .label{font-size:.7rem}
+  .quote-card{padding:10px 12px;flex-direction:column;align-items:stretch;gap:8px}
+  .quote-info{gap:8px;font-size:.75rem}
+  .quote-actions{justify-content:flex-end}
+  .struct-tag{font-size:.68rem;padding:2px 8px}
+  .badge{padding:2px 8px;font-size:.62rem}
+  .modal{max-width:98vw!important;border-radius:var(--radius)}
+  .modal-overlay{padding:20px 6px}
+  .empty{padding:32px 16px}
+  .empty-icon{font-size:2rem}
+  .calc-section-title{font-size:.75rem;margin-bottom:10px}
+  .calc-actions{gap:4px}
+  .gap-8{gap:4px!important}
+  .toggle{width:34px;height:20px}
+  .toggle-slider::before{width:14px;height:14px;top:3px;right:3px}
+  .toggle input:checked+.toggle-slider::before{transform:translateX(14px)}
+  .invoice .invoice-title{font-size:1.2rem}
+}
+
+/* Fix overflow on very small screens */
+@media(max-width:400px){
+  .calc-item-row{grid-template-columns:1fr 50px 35px 60px 24px!important;gap:3px!important}
+  .calc-cost-row{grid-template-columns:1fr 55px 32px 32px 24px!important;gap:3px!important}
+  th,td{padding:6px 4px;font-size:.65rem}
+}
+</style>
+</head>
+<body>
+<div class="app">
+<div class="layout">
+
+<!-- ===== SIDEBAR ===== -->
+<div class="sidebar">
+  <div class="sidebar-brand">
+    <div class="sidebar-logo">⚙️</div>
+    <h1>حاسبة الحديد</h1>
+    <p>ورشة الهياكل المعدنية</p>
+  </div>
+  <div class="sidebar-nav" id="sideNav">
+    <button class="sidebar-btn active" data-tab="dashboard"><span class="icon">📊</span> الرئيسية</button>
+    <button class="sidebar-btn" data-tab="iron"><span class="icon">🔩</span> الحديد</button>
+    <button class="sidebar-btn" data-tab="structures"><span class="icon">🏗️</span> الهياكل</button>
+    <button class="sidebar-btn" data-tab="costs"><span class="icon">💰</span> الإضافات</button>
+    <button class="sidebar-btn" data-tab="calculator"><span class="icon">🧮</span> الحاسبة</button>
+    <button class="sidebar-btn" data-tab="quotes"><span class="icon">📄</span> العروض</button>
+  </div>
+  <div class="sidebar-footer">
+    <button class="sidebar-btn" onclick="exportData()"><span class="icon">📦</span> تصدير</button>
+    <button class="sidebar-btn" onclick="document.getElementById('importFile').click()"><span class="icon">📂</span> استيراد</button>
+    <button class="sidebar-btn" onclick="if(confirm('مسح كل البيانات؟'))resetAll()"><span class="icon">🔄</span> إعادة تعيين</button>
+    <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
+  </div>
+</div>
+
+<!-- ===== MAIN ===== -->
+<div class="main">
+
+  <!-- DASHBOARD -->
+  <div class="tab-content" id="tab-dashboard">
+    <div class="stat-grid" id="statsGrid"></div>
+    <div class="card" style="margin-top:18px">
+      <div class="card-header"><h2><span class="badge-dot"></span>آخر العروض</h2></div>
+      <div id="recentQuotes"></div>
+    </div>
+  </div>
+
+  <!-- IRON -->
+  <div class="tab-content hidden" id="tab-iron">
+    <div class="card">
+      <div class="card-header"><h2><span class="badge-dot"></span>أنواع الحديد</h2>
+        <button class="btn btn-primary btn-sm" onclick="openIronModal()">+ إضافة</button>
+      </div>
+      <div class="table-wrap">
+        <table><thead><tr><th>النوع</th><th>الوحدة</th><th>السعر</th><th style="width:90px"></th></tr></thead>
+        <tbody id="ironTableBody"></tbody></table>
+      </div>
+      <div class="empty" id="ironEmpty"><div class="empty-icon">🔩</div>لا توجد أنواع حديد<br><span style="font-size:.74rem">أضف أول نوع للبدء</span></div>
+    </div>
+  </div>
+
+  <!-- STRUCTURES -->
+  <div class="tab-content hidden" id="tab-structures">
+    <div class="card">
+      <div class="card-header"><h2><span class="badge-dot"></span>أنواع الهياكل</h2>
+        <button class="btn btn-primary btn-sm" onclick="openStructureModal()">+ إضافة</button>
+      </div>
+      <div id="structuresList"></div>
+    </div>
+  </div>
+
+  <!-- COST FIELDS -->
+  <div class="tab-content hidden" id="tab-costs">
+    <div class="card">
+      <div class="card-header"><h2><span class="badge-dot"></span>الحقول الإضافية</h2>
+        <button class="btn btn-primary btn-sm" onclick="openCostFieldModal()">+ إضافة</button>
+      </div>
+      <div class="table-wrap">
+        <table><thead><tr><th>الحقل</th><th>النوع</th><th>القيمة الافتراضية</th><th style="width:90px"></th></tr></thead>
+        <tbody id="costFieldTableBody"></tbody></table>
+      </div>
+      <div class="empty" id="costFieldEmpty"><div class="empty-icon">💰</div>لا توجد حقول إضافية<br><span style="font-size:.74rem">أضف تكاليف مثل عمال، إيجار، دهان...</span></div>
+    </div>
+  </div>
+
+  <!-- CALCULATOR -->
+  <div class="tab-content hidden" id="tab-calculator">
+    <div class="card">
+      <div class="card-header"><h2><span class="badge-dot"></span>حاسبة التكلفة</h2>
+        <div class="gap-8" style="display:flex;gap:8px;flex-wrap:wrap">
+          <input class="form-control form-control-sm" style="width:160px" placeholder="اسم العميل" id="calcCustomer">
+          <button class="btn btn-success btn-sm" onclick="saveQuote()">💾 حفظ</button>
+          <button class="btn btn-primary btn-sm" onclick="previewInvoice()">📄 فاتورة</button>
+        </div>
+      </div>
+
+      <div class="calc-mode-tabs">
+        <button class="calc-mode-tab active" data-calc-mode="iron" onclick="setCalcMode('iron')">🔩 حسب الحديد</button>
+        <button class="calc-mode-tab" data-calc-mode="structure" onclick="setCalcMode('structure')">🏗️ حسب الهيكل</button>
+      </div>
+
+      <!-- Mode: Iron -->
+      <div id="calcModeIron" class="calc-section">
+        <div class="calc-section-title">📋 أصناف الحديد</div>
+        <div class="calc-actions"><button class="btn btn-outline btn-sm" onclick="addCalcIronItem()">+ إضافة صنف</button></div>
+        <div class="calc-header-row" style="grid-template-columns:1fr 80px 55px 95px 32px">
+          <span>الصنف</span><span style="text-align:center">الكمية</span><span style="text-align:center">الوحدة</span><span style="text-align:center">الإجمالي</span><span></span>
+        </div>
+        <div id="calcIronItems"></div>
+        <div style="margin-top:8px;font-size:.78rem;color:var(--gray-400);text-align:left" id="calcIronSubtotal">مجموع الحديد: ٠</div>
+      </div>
+
+      <!-- Mode: Structure -->
+      <div id="calcModeStructure" class="hidden calc-section">
+        <div class="calc-section-title">🏗️ مكونات الهيكل</div>
+        <div class="form-row" style="margin-bottom:12px">
+          <div class="form-group">
+            <label>اختر الهيكل</label>
+            <select class="form-control" id="calcStructureSelect" onchange="onCalcStructureChange()"><option value="">-- اختر --</option></select>
+          </div>
+        </div>
+        <div id="calcStructureItemsWrap" class="hidden">
+          <div class="calc-header-row" style="grid-template-columns:1fr 80px 55px 95px 32px">
+            <span>الصنف</span><span style="text-align:center">الكمية</span><span style="text-align:center">الوحدة</span><span style="text-align:center">الإجمالي</span><span></span>
+          </div>
+          <div id="calcStructureItems"></div>
+          <div style="margin-top:8px;font-size:.78rem;color:var(--gray-400);text-align:left" id="calcStructureSubtotal">مجموع الحديد: ٠</div>
+        </div>
+      </div>
+
+      <!-- Cost Fields -->
+      <div class="calc-section" style="margin-top:12px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+          <span class="calc-section-title" style="margin-bottom:0">💰 التكاليف الإضافية</span>
+          <button class="btn btn-ghost btn-sm" onclick="addNewCostFieldToCalc()">+ إضافة</button>
+        </div>
+        <div class="calc-header-row" style="grid-template-columns:1fr 85px 44px 44px 32px">
+          <span>الحقل</span><span style="text-align:center">القيمة</span><span style="text-align:center">حساب</span><span style="text-align:center">فاتورة</span><span></span>
+        </div>
+        <div id="calcCostFields"></div>
+      </div>
+
+      <!-- Totals -->
+      <div class="calc-total-sub"><span>إجمالي الحديد</span><span id="totalIronAmount">٠</span></div>
+      <div class="calc-total-sub"><span>إجمالي الإضافات</span><span id="totalExtraAmount">٠</span></div>
+      <div class="calc-total"><span>الإجمالي الكلي</span><span id="totalGrandAmount">٠</span></div>
+    </div>
+  </div>
+
+  <!-- QUOTES -->
+  <div class="tab-content hidden" id="tab-quotes">
+    <div class="card">
+      <div class="card-header"><h2><span class="badge-dot"></span>العروض السابقة</h2>
+        <input class="form-control form-control-sm" style="width:180px" placeholder="بحث بالعميل..." id="quoteSearch" oninput="renderQuotes()">
+      </div>
+      <div id="quotesList"></div>
+    </div>
+  </div>
+
+</div><!-- /main -->
+</div><!-- /layout -->
+</div><!-- /app -->
+
+<!-- ===== MODALS ===== -->
+
+<!-- Iron Modal -->
+<div class="modal-overlay" id="ironModal">
+  <div class="modal">
+    <div class="modal-header"><h3 id="ironModalTitle">إضافة نوع حديد</h3><button class="modal-close" onclick="closeModal('ironModal')">&times;</button></div>
+    <div class="modal-body">
+      <input type="hidden" id="ironEditId">
+      <div class="form-group"><label>اسم النوع</label><input class="form-control" id="ironName" placeholder="مثال: HEB عارضة 140×6000"></div>
+      <div class="form-row">
+        <div class="form-group"><label>الوحدة</label><select class="form-control" id="ironUnit"><option value="كغم">كغم</option><option value="طن">طن</option><option value="متر">متر</option><option value="م²">م²</option><option value="قطعة">قطعة</option></select></div>
+        <div class="form-group"><label>السعر</label><input class="form-control" id="ironPrice" type="number" min="0" step="1" placeholder="٠"></div>
+      </div>
+    </div>
+    <div class="modal-footer"><button class="btn btn-primary" onclick="saveIronType()">حفظ</button><button class="btn btn-ghost" onclick="closeModal('ironModal')">إلغاء</button></div>
+  </div>
+</div>
+
+<!-- Structure Modal -->
+<div class="modal-overlay" id="structureModal">
+  <div class="modal" style="max-width:640px">
+    <div class="modal-header"><h3 id="structureModalTitle">إضافة هيكل</h3><button class="modal-close" onclick="closeModal('structureModal')">&times;</button></div>
+    <div class="modal-body">
+      <input type="hidden" id="structureEditId">
+      <div class="form-group"><label>اسم الهيكل</label><input class="form-control" id="structureName" placeholder="مثال: سطحة هيدروليك"></div>
+      <div class="form-group">
+        <label style="display:flex;justify-content:space-between;align-items:center"><span>مكونات الهيكل من الحديد</span><button class="btn btn-outline btn-xs" onclick="addStructureItemRow()">+ إضافة</button></label>
+        <div id="structureItemsContainer" style="margin-top:10px"></div>
+      </div>
+    </div>
+    <div class="modal-footer"><button class="btn btn-primary" onclick="saveStructure()">حفظ</button><button class="btn btn-ghost" onclick="closeModal('structureModal')">إلغاء</button></div>
+  </div>
+</div>
+
+<!-- Cost Field Modal -->
+<div class="modal-overlay" id="costFieldModal">
+  <div class="modal">
+    <div class="modal-header"><h3 id="costFieldModalTitle">إضافة حقل إضافي</h3><button class="modal-close" onclick="closeModal('costFieldModal')">&times;</button></div>
+    <div class="modal-body">
+      <input type="hidden" id="costFieldEditId">
+      <div class="form-group"><label>اسم الحقل</label><input class="form-control" id="costFieldName" placeholder="مثال: عمال، دهان، إيجار"></div>
+      <div class="form-row">
+        <div class="form-group"><label>النوع</label><select class="form-control" id="costFieldType" onchange="toggleCostFieldValueLabel()"><option value="fixed">قيمة ثابتة</option><option value="percentage">نسبة مئوية</option></select></div>
+        <div class="form-group"><label id="costFieldValueLabel">القيمة الافتراضية</label><input class="form-control" id="costFieldValue" type="number" min="0" step="1" placeholder="٠"></div>
+      </div>
+    </div>
+    <div class="modal-footer"><button class="btn btn-primary" onclick="saveCostField()">حفظ</button><button class="btn btn-ghost" onclick="closeModal('costFieldModal')">إلغاء</button></div>
+  </div>
+</div>
+
+<!-- Invoice Modal -->
+<div class="modal-overlay" id="invoiceModal">
+  <div class="modal" style="max-width:820px">
+    <div class="modal-header no-print"><h3>عرض الفاتورة</h3>
+      <div class="gap-8" style="display:flex;gap:8px">
+        <button class="btn btn-primary btn-sm" onclick="window.print()">🖨️ طباعة</button>
+        <button class="btn btn-ghost btn-sm" onclick="closeModal('invoiceModal')">إغلاق</button>
+      </div>
+    </div>
+    <div class="modal-body" id="invoiceContent"></div>
+  </div>
+</div>
+
+<!-- Confirm Modal -->
+<div class="modal-overlay" id="confirmModal">
+  <div class="modal" style="max-width:380px">
+    <div class="modal-header"><h3>تأكيد</h3><button class="modal-close" onclick="closeModal('confirmModal')">&times;</button></div>
+    <div class="modal-body" id="confirmMessage" style="font-size:.9rem">هل أنت متأكد؟</div>
+    <div class="modal-footer"><button class="btn btn-danger" id="confirmBtn">حذف</button><button class="btn btn-ghost" onclick="closeModal('confirmModal')">إلغاء</button></div>
+  </div>
+</div>
+
+<script>
+// ===== STATE =====
+let state = loadState();
+let calcMode = 'iron';
+let calcIronItems = [];
+let calcCostOverrides = {};
+let calcStructureItems = [];
+let confirmCallback = null;
+
+function defaultState() {
+  return {
+    ironTypes: [
+      {id:'d1',name:'HEB عارضة 140×6000',unit:'قطعة',price:657},
+      {id:'d2',name:'أنبوب مربع 40×40×6000',unit:'قطعة',price:102},
+      {id:'d3',name:'أنبوب مستطيل 100×50×6000',unit:'قطعة',price:180},
+      {id:'d4',name:'شفة صاج 10×200×200',unit:'قطعة',price:15},
+      {id:'d5',name:'أنبوب مربع 100×100×6000',unit:'قطعة',price:634},
+      {id:'d6',name:'أنبوب مربع 80×80×6000',unit:'قطعة',price:340},
+      {id:'d7',name:'مجرى UPN 40×20×6000',unit:'قطعة',price:80},
+      {id:'d8',name:'مجرى UPN 140×6000',unit:'قطعة',price:317},
+      {id:'d9',name:'أنبوب مستطيل 80×40×6000',unit:'قطعة',price:72},
+      {id:'d10',name:'صاج CHQ 4×1220×2440',unit:'قطعة',price:335},
+      {id:'d11',name:'مجرى UPN 120×6000',unit:'قطعة',price:250},
+      {id:'d12',name:'شريط مسطح 10×50×6000',unit:'قطعة',price:82},
+      {id:'d13',name:'حديد تسليح ٨مم',unit:'كغم',price:800},
+      {id:'d14',name:'حديد تسليح ١٢مم',unit:'كغم',price:850},
+      {id:'d15',name:'حديد زاوية ٣×٣',unit:'متر',price:15000},
+      {id:'d16',name:'صاج ٣مم',unit:'م²',price:25000},
+    ],
+    structureTypes: [
+      {id:'s1',name:'سطحة عادية',items:[{ironTypeId:'d13',qty:500},{ironTypeId:'d15',qty:20},{ironTypeId:'d16',qty:10}]},
+      {id:'s2',name:'سطحة هيدروليك',items:[
+        {ironTypeId:'d1',qty:2},{ironTypeId:'d2',qty:15},{ironTypeId:'d3',qty:2},
+        {ironTypeId:'d4',qty:2},{ironTypeId:'d5',qty:2},{ironTypeId:'d6',qty:2},
+        {ironTypeId:'d7',qty:2},{ironTypeId:'d8',qty:1},{ironTypeId:'d9',qty:6},
+        {ironTypeId:'d10',qty:6},{ironTypeId:'d11',qty:1},{ironTypeId:'d12',qty:2}
+      ]},
+    ],
+    costFields: [
+      {id:'c1',name:'عمال',type:'fixed',value:500000},
+      {id:'c2',name:'إيجار ورشة',type:'fixed',value:200000},
+      {id:'c3',name:'دهان',type:'fixed',value:150000},
+      {id:'c4',name:'نقل',type:'fixed',value:100000},
+    ],
+    quotations: []
+  };
+}
+
+function loadState() {
+  try{const d=localStorage.getItem('hadidApp');if(d)return JSON.parse(d)}catch(e){}
+  return defaultState();
+}
+function saveState(){localStorage.setItem('hadidApp',JSON.stringify(state))}
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6)}
+
+// ===== TOAST =====
+function toast(msg,type='success'){const icons={success:'✅',error:'❌'};const t=document.createElement('div');t.className='toast toast-'+type;t.innerHTML='<span>'+(icons[type]||'')+'</span><span>'+msg+'</span>';document.body.appendChild(t);setTimeout(()=>t.remove(),3000)}
+
+// ===== NAVIGATION =====
+document.querySelectorAll('.sidebar-btn').forEach(b=>{
+  b.addEventListener('click',function(){
+    if(!this.dataset.tab) return;
+    document.querySelectorAll('.sidebar-btn').forEach(x=>x.classList.remove('active'));
+    this.classList.add('active');
+    document.querySelectorAll('.tab-content').forEach(x=>x.classList.add('hidden'));
+    document.getElementById('tab-'+this.dataset.tab).classList.remove('hidden');
+    if(this.dataset.tab==='dashboard') renderDashboard();
+    if(this.dataset.tab==='quotes') renderQuotes();
+    if(this.dataset.tab==='calculator') initCalc();
+  });
+});
+
+// ===== DASHBOARD =====
+function renderDashboard() {
+  const qs = state.quotations;
+  const totalVal = qs.reduce((s,q)=>s+q.total,0);
+  document.getElementById('statsGrid').innerHTML = `
+    <div class="stat-card"><div class="label">📄 إجمالي العروض</div><div class="num">${qs.length}</div></div>
+    <div class="stat-card"><div class="label">💰 متوسط قيمة العرض</div><div class="num">${qs.length?Math.round(totalVal/qs.length/1000).toLocaleString()+'K':'٠'}</div></div>
+    <div class="stat-card"><div class="label">🔩 أنواع الحديد</div><div class="num">${state.ironTypes.length}</div></div>
+    <div class="stat-card"><div class="label">🏗️ الهياكل</div><div class="num">${state.structureTypes.length}</div></div>
+  `;
+  const rec = qs.slice(-5).reverse();
+  const el=document.getElementById('recentQuotes');
+  if(!rec.length){el.innerHTML='<div class="empty"><div class="empty-icon">📄</div>لا توجد عروض بعد<br><span style="font-size:.74rem">استخدم الحاسبة لإنشاء أول عرض</span></div>';return}
+  el.innerHTML = rec.map(q=>`
+    <div class="quote-card">
+      <div class="quote-info">
+        <span class="badge badge-primary">${q.customer||'بدون اسم'}</span>
+        <span style="font-size:.78rem;color:var(--gray-400)">${q.date}</span>
+        <span style="font-weight:700;color:var(--gray-800)">${(+q.total).toLocaleString()} ر.س</span>
+        <span class="badge ${q.status==='final'?'badge-success':'badge-warning'}">${q.status==='final'?'نهائي':'مسودة'}</span>
+      </div>
+      <div class="quote-actions"><button class="btn btn-outline btn-xs" onclick="viewQuote('${q.id}')">عرض</button></div>
+    </div>`).join('');
+}
+
+// ===== IRON CRUD =====
+function renderIronTypes(){
+  const items=state.ironTypes,tbody=document.getElementById('ironTableBody'),empty=document.getElementById('ironEmpty');
+  if(!items.length){tbody.innerHTML='';empty.style.display='block';return}
+  empty.style.display='none';
+  tbody.innerHTML=items.map(it=>`<tr><td><strong>${it.name}</strong></td><td>${it.unit}</td><td>${(+it.price).toLocaleString()} ر.س</td><td><button class="btn btn-outline btn-xs" onclick="editIronType('${it.id}')">تعديل</button><button class="btn btn-danger btn-xs" onclick="confirmDelete(()=>deleteIronType('${it.id}'),'حذف ${it.name}؟')">حذف</button></td></tr>`).join('');
+}
+function openIronModal(data){
+  document.getElementById('ironEditId').value=data?.id||'';
+  document.getElementById('ironModalTitle').textContent=data?'تعديل نوع حديد':'إضافة نوع حديد';
+  document.getElementById('ironName').value=data?.name||'';
+  document.getElementById('ironUnit').value=data?.unit||'قطعة';
+  document.getElementById('ironPrice').value=data?.price||'';
+  openModal('ironModal');
+}
+function saveIronType(){
+  const id=document.getElementById('ironEditId').value,name=document.getElementById('ironName').value.trim(),unit=document.getElementById('ironUnit').value,price=parseFloat(document.getElementById('ironPrice').value)||0;
+  if(!name){toast('أدخل اسم النوع','error');return}
+  if(price<=0){toast('أدخل سعر صحيح','error');return}
+  if(id){const it=state.ironTypes.find(x=>x.id===id);if(it){it.name=name;it.unit=unit;it.price=price}}
+  else state.ironTypes.push({id:uid(),name,unit,price});
+  saveState();renderIronTypes();closeModal('ironModal');toast(id?'تم التعديل':'تمت الإضافة');
+}
+function editIronType(id){const it=state.ironTypes.find(x=>x.id===id);if(it)openIronModal(it)}
+function deleteIronType(id){
+  state.ironTypes=state.ironTypes.filter(x=>x.id!==id);
+  state.structureTypes.forEach(s=>{s.items=s.items.filter(x=>x.ironTypeId!==id)});
+  saveState();renderIronTypes();closeModal('confirmModal');toast('تم الحذف');
+}
+
+// ===== STRUCTURES CRUD =====
+let structureItemRows=[];
+function renderStructures(){
+  const el=document.getElementById('structuresList');
+  if(!state.structureTypes.length){el.innerHTML='<div class="empty"><div class="empty-icon">🏗️</div>لا توجد هياكل<br><span style="font-size:.74rem">أضف هيكل جديد</span></div>';return}
+  el.innerHTML=state.structureTypes.map(s=>{
+    const itemsHtml=s.items.map(item=>{const iron=state.ironTypes.find(x=>x.id===item.ironTypeId);return iron?`<span class="struct-tag"><span class="dot">•</span> ${iron.name}: <strong>${item.qty}</strong> ${iron.unit}</span>`:''}).join('');
+    return `<div class="quote-card"><div><strong style="font-size:.95rem">${s.name}</strong><div style="margin-top:8px;display:flex;flex-wrap:wrap">${itemsHtml||'<span class="text-muted">لا توجد مكونات</span>'}</div></div><div class="quote-actions"><button class="btn btn-outline btn-xs" onclick="editStructure('${s.id}')">تعديل</button><button class="btn btn-danger btn-xs" onclick="confirmDelete(()=>deleteStructure('${s.id}'),'حذف ${s.name}؟')">حذف</button></div></div>`
+  }).join('');
+}
+function openStructureModal(data){
+  structureItemRows=data?data.items.map(x=>({...x})):[];
+  document.getElementById('structureEditId').value=data?.id||'';
+  document.getElementById('structureModalTitle').textContent=data?'تعديل هيكل':'إضافة هيكل';
+  document.getElementById('structureName').value=data?.name||'';
+  renderStructureItems();openModal('structureModal');
+}
+function renderStructureItems(){
+  const el=document.getElementById('structureItemsContainer');
+  if(!structureItemRows.length){el.innerHTML='<div class="text-muted">لا توجد مكونات</div>';return}
+  el.innerHTML=structureItemRows.map((item,i)=>`
+    <div style="display:flex;gap:8px;margin-bottom:8px;align-items:center">
+      <select class="form-control form-control-sm" onchange="structureItemRows[${i}].ironTypeId=this.value" style="flex:1"><option value="">-- اختر --</option>${state.ironTypes.map(it=>`<option value="${it.id}"${it.id===item.ironTypeId?' selected':''}>${it.name}</option>`).join('')}</select>
+      <input class="form-control form-control-sm" type="number" min="0" style="width:80px" placeholder="الكمية" value="${item.qty||''}" onchange="structureItemRows[${i}].qty=parseFloat(this.value)||0">
+      <button class="btn btn-danger btn-xs" onclick="structureItemRows.splice(${i},1);renderStructureItems()">✕</button>
+    </div>`).join('');
+}
+function addStructureItemRow(){structureItemRows.push({ironTypeId:'',qty:0});renderStructureItems()}
+function saveStructure(){
+  const id=document.getElementById('structureEditId').value,name=document.getElementById('structureName').value.trim();
+  if(!name){toast('أدخل اسم الهيكل','error');return}
+  const valid=structureItemRows.filter(x=>x.ironTypeId&&x.qty>0);
+  if(id){const s=state.structureTypes.find(x=>x.id===id);if(s){s.name=name;s.items=valid}}
+  else state.structureTypes.push({id:uid(),name,items:valid});
+  saveState();renderStructures();closeModal('structureModal');toast(id?'تم التعديل':'تمت الإضافة');
+}
+function editStructure(id){const s=state.structureTypes.find(x=>x.id===id);if(s)openStructureModal(s)}
+function deleteStructure(id){state.structureTypes=state.structureTypes.filter(x=>x.id!==id);saveState();renderStructures();closeModal('confirmModal');toast('تم الحذف')}
+
+// ===== COST FIELDS CRUD =====
+function renderCostFields(){
+  const items=state.costFields,tbody=document.getElementById('costFieldTableBody'),empty=document.getElementById('costFieldEmpty');
+  if(!items.length){tbody.innerHTML='';empty.style.display='block';return}
+  empty.style.display='none';
+  tbody.innerHTML=items.map(c=>`<tr><td><strong>${c.name}</strong></td><td>${c.type==='fixed'?'ثابت':'نسبة'}</td><td>${c.type==='fixed'?(+c.value).toLocaleString()+' ر.س':c.value+'%'}</td><td><button class="btn btn-outline btn-xs" onclick="editCostField('${c.id}')">تعديل</button><button class="btn btn-danger btn-xs" onclick="confirmDelete(()=>deleteCostField('${c.id}'),'حذف ${c.name}؟')">حذف</button></td></tr>`).join('');
+}
+function openCostFieldModal(data){
+  document.getElementById('costFieldEditId').value=data?.id||'';
+  document.getElementById('costFieldModalTitle').textContent=data?'تعديل حقل':'إضافة حقل';
+  document.getElementById('costFieldName').value=data?.name||'';
+  document.getElementById('costFieldType').value=data?.type||'fixed';
+  document.getElementById('costFieldValue').value=data?.value||'';
+  toggleCostFieldValueLabel();openModal('costFieldModal');
+}
+function toggleCostFieldValueLabel(){const t=document.getElementById('costFieldType').value;document.getElementById('costFieldValueLabel').textContent=t==='fixed'?'القيمة الافتراضية':'النسبة المئوية'}
+function saveCostField(){
+  const id=document.getElementById('costFieldEditId').value,name=document.getElementById('costFieldName').value.trim(),type=document.getElementById('costFieldType').value,value=parseFloat(document.getElementById('costFieldValue').value)||0;
+  if(!name){toast('أدخل اسم الحقل','error');return}
+  if(value<=0){toast('أدخل قيمة صحيحة','error');return}
+  if(id){const c=state.costFields.find(x=>x.id===id);if(c){c.name=name;c.type=type;c.value=value}}
+  else state.costFields.push({id:uid(),name,type,value});
+  saveState();renderCostFields();closeModal('costFieldModal');toast(id?'تم التعديل':'تمت الإضافة');
+}
+function editCostField(id){const c=state.costFields.find(x=>x.id===id);if(c)openCostFieldModal(c)}
+function deleteCostField(id){state.costFields=state.costFields.filter(x=>x.id!==id);saveState();renderCostFields();closeModal('confirmModal');toast('تم الحذف')}
+
+// ===== CALCULATOR =====
+function setCalcMode(mode){
+  calcMode=mode;
+  document.querySelectorAll('.calc-mode-tab').forEach(t=>t.classList.toggle('active',t.dataset.calcMode===mode));
+  document.getElementById('calcModeIron').classList.toggle('hidden',mode!=='iron');
+  document.getElementById('calcModeStructure').classList.toggle('hidden',mode!=='structure');
+  if(mode==='iron')updateCalc();
+  if(mode==='structure')onCalcStructureChange();
+}
+function initCalc(){
+  if(!calcIronItems.length)calcIronItems=[{ironTypeId:'',qty:0}];
+  renderCalcIronItems();renderCalcCostFields();populateStructureSelect();
+  if(calcMode==='structure'&&document.getElementById('calcStructureSelect').value)onCalcStructureChange();
+  updateCalc();
+}
+function renderCalcIronItems(){
+  const el=document.getElementById('calcIronItems');
+  if(!state.ironTypes.length){el.innerHTML='<div class="text-muted">لا توجد أنواع حديد</div>';return}
+  el.innerHTML=calcIronItems.map((item,i)=>{const iron=state.ironTypes.find(x=>x.id===item.ironTypeId);const unit=iron?iron.unit:'';const price=iron?iron.price:0;const subtotal=item.qty*price;return `<div class="calc-item-row"><select class="form-control form-control-sm" onchange="calcIronItems[${i}].ironTypeId=this.value;updateCalc()"><option value="">--</option>${state.ironTypes.map(it=>`<option value="${it.id}"${it.id===item.ironTypeId?' selected':''}>${it.name}</option>`).join('')}</select><input class="form-control form-control-sm" type="number" min="0" step="0.001" style="text-align:center" value="${item.qty||''}" placeholder="0" onchange="calcIronItems[${i}].qty=parseFloat(this.value)||0;updateCalc()"><span style="text-align:center;font-size:.76rem;color:var(--gray-400)">${unit}</span><span style="text-align:center;font-weight:600">${subtotal?(+subtotal).toLocaleString():''}</span><button class="btn btn-ghost btn-xs" onclick="calcIronItems.splice(${i},1);renderCalcIronItems();updateCalc()">✕</button></div>`}).join('');
+}
+function addCalcIronItem(){calcIronItems.push({ironTypeId:'',qty:0});renderCalcIronItems()}
+function populateStructureSelect(){
+  const sel=document.getElementById('calcStructureSelect');
+  sel.innerHTML='<option value="">-- اختر --</option>'+state.structureTypes.map(s=>`<option value="${s.id}">${s.name}</option>`).join('');
+}
+function onCalcStructureChange(){
+  const sid=document.getElementById('calcStructureSelect').value,wrap=document.getElementById('calcStructureItemsWrap');
+  if(!sid){wrap.classList.add('hidden');updateCalc();return}
+  const s=state.structureTypes.find(x=>x.id===sid);
+  if(!s){wrap.classList.add('hidden');updateCalc();return}
+  wrap.classList.remove('hidden');calcStructureItems=s.items.map(x=>({...x}));renderCalcStructureItems();updateCalc();
+}
+function renderCalcStructureItems(){
+  const el=document.getElementById('calcStructureItems');
+  el.innerHTML=calcStructureItems.map((item,i)=>{const iron=state.ironTypes.find(x=>x.id===item.ironTypeId);if(!iron)return '';const subtotal=item.qty*iron.price;return `<div class="calc-item-row"><span style="font-size:.82rem">${iron.name}</span><input class="form-control form-control-sm" type="number" min="0" step="0.001" style="text-align:center" value="${item.qty||''}" onchange="calcStructureItems[${i}].qty=parseFloat(this.value)||0;updateCalc()"><span style="text-align:center;font-size:.76rem;color:var(--gray-400)">${iron.unit}</span><span style="text-align:center;font-weight:600">${subtotal?(+subtotal).toLocaleString():''}</span><button class="btn btn-ghost btn-xs" onclick="calcStructureItems.splice(${i},1);renderCalcStructureItems();updateCalc()">✕</button></div>`}).join('');
+}
+function renderCalcCostFields(){
+  const el=document.getElementById('calcCostFields');
+  if(!state.costFields.length){el.innerHTML='<div class="text-muted">لا توجد حقول إضافية</div>';return}
+  el.innerHTML=state.costFields.map(cf=>{
+    const ov=calcCostOverrides[cf.id]||{value:cf.value,calc:false,invoice:true};
+    return `<div class="calc-cost-row"><span style="font-size:.82rem;font-weight:500">${cf.name}</span><input class="form-control form-control-sm" type="number" min="0" step="1" style="text-align:center" value="${ov.value}" onchange="calcCostOverrides['${cf.id}']=calcCostOverrides['${cf.id}']||{calc:false,invoice:true};calcCostOverrides['${cf.id}'].value=parseFloat(this.value)||0;updateCalc()"><label class="toggle" style="margin:0 auto" title="ضمن الحساب"><input type="checkbox" ${ov.calc?'checked':''} onchange="calcCostOverrides['${cf.id}']=calcCostOverrides['${cf.id}']||{value:${cf.value},invoice:true};calcCostOverrides['${cf.id}'].calc=this.checked;updateCalc()"><span class="toggle-slider"></span></label><label class="toggle" style="margin:0 auto" title="إظهار في الفاتورة"><input type="checkbox" ${ov.invoice?'checked':''} onchange="calcCostOverrides['${cf.id}']=calcCostOverrides['${cf.id}']||{value:${cf.value},calc:false};calcCostOverrides['${cf.id}'].invoice=this.checked"><span class="toggle-slider"></span></label><button class="btn btn-ghost btn-xs" onclick="deleteCostFieldInline('${cf.id}')" title="حذف">✕</button></div>`
+  }).join('');
+}
+function deleteCostFieldInline(id){
+  if(!confirm('حذف هذا الحقل؟'))return;
+  state.costFields=state.costFields.filter(x=>x.id!==id);
+  delete calcCostOverrides[id];
+  saveState();renderCostFields();renderCalcCostFields();updateCalc();toast('تم الحذف');
+}
+function addNewCostFieldToCalc(){
+  const n=prompt('اسم الحقل الجديد:');if(!n||!n.trim())return;
+  const v=parseFloat(prompt('القيمة:'))||0;if(v<=0){toast('القيمة يجب أن تكون أكبر من 0','error');return}
+  const cf={id:uid(),name:n.trim(),type:'fixed',value:v};
+  state.costFields.push(cf);calcCostOverrides[cf.id]={value:v,calc:false,invoice:true};
+  saveState();renderCostFields();renderCalcCostFields();updateCalc();toast('تمت الإضافة');
+}
+function updateCalc(){
+  let ironTotal=0;
+  if(calcMode==='iron'){calcIronItems.forEach(item=>{const iron=state.ironTypes.find(x=>x.id===item.ironTypeId);if(iron)ironTotal+=item.qty*iron.price})}
+  else{calcStructureItems.forEach(item=>{const iron=state.ironTypes.find(x=>x.id===item.ironTypeId);if(iron)ironTotal+=item.qty*iron.price})}
+  let extraTotal=0;
+  state.costFields.forEach(cf=>{const ov=calcCostOverrides[cf.id]||{value:cf.value,calc:false,invoice:true};if(!ov.calc)return;if(cf.type==='fixed')extraTotal+=ov.value;else extraTotal+=ironTotal*(ov.value/100)});
+  const grandTotal=ironTotal+extraTotal;
+  document.getElementById('calcIronSubtotal').textContent=`مجموع الحديد: ${ironTotal.toLocaleString()} ر.س`;
+  document.getElementById('calcStructureSubtotal').textContent=`مجموع الحديد: ${ironTotal.toLocaleString()} ر.س`;
+  document.getElementById('totalIronAmount').textContent=ironTotal.toLocaleString()+' ر.س';
+  document.getElementById('totalExtraAmount').textContent=extraTotal.toLocaleString()+' ر.س';
+  document.getElementById('totalGrandAmount').textContent=grandTotal.toLocaleString()+' ر.س';
+}
+
+// ===== QUOTATIONS =====
+function saveQuote(){
+  const customer=document.getElementById('calcCustomer').value.trim()||'بدون اسم';
+  const ironItems=[];
+  if(calcMode==='iron'){calcIronItems.forEach(item=>{const iron=state.ironTypes.find(x=>x.id===item.ironTypeId);if(iron&&item.qty>0)ironItems.push({ironTypeId:item.ironTypeId,name:iron.name,unit:iron.unit,price:iron.price,qty:item.qty})})}
+  else{calcStructureItems.forEach(item=>{const iron=state.ironTypes.find(x=>x.id===item.ironTypeId);if(iron&&item.qty>0)ironItems.push({ironTypeId:item.ironTypeId,name:iron.name,unit:iron.unit,price:iron.price,qty:item.qty})})}
+  let ironTotal=ironItems.reduce((s,i)=>s+i.qty*i.price,0);
+  let extraTotal=0;
+  const costFields=state.costFields.map(cf=>{const ov=calcCostOverrides[cf.id]||{value:cf.value,calc:false,invoice:true};let ev=ov.calc?ov.value:0;let amt=0;if(ov.calc)amt=cf.type==='fixed'?ev:ironTotal*(ev/100);extraTotal+=amt;return{fieldId:cf.id,name:cf.name,type:cf.type,value:ov.value,calc:ov.calc,invoice:ov.invoice,amount:amt}});
+  const total=ironTotal+extraTotal;
+  const status=confirm('🟡 حفظ كمسودة؟\n✅ OK = مسودة\n❌ إلغاء = عرض نهائي')?'draft':'final';
+  state.quotations.push({id:uid(),customer,date:new Date().toISOString().slice(0,10),mode:calcMode,structureTypeId:calcMode==='structure'?document.getElementById('calcStructureSelect').value:'',ironItems,costFields,ironTotal,extraTotal,total,status});
+  saveState();toast('تم حفظ العرض');
+}
+function renderQuotes(){
+  const s=document.getElementById('quoteSearch').value.trim().toLowerCase(),el=document.getElementById('quotesList');
+  let qs=state.quotations;if(s)qs=qs.filter(q=>q.customer.toLowerCase().includes(s));
+  if(!qs.length){el.innerHTML='<div class="empty"><div class="empty-icon">📄</div>'+(s?'لا توجد نتائج':'لا توجد عروض')+'</div>';return}
+  el.innerHTML=qs.slice().reverse().map(q=>`
+    <div class="quote-card">
+      <div class="quote-info"><span class="badge badge-primary">${q.customer}</span><span style="font-size:.78rem;color:var(--gray-400)">${q.date}</span><span style="font-weight:700">${(+q.total).toLocaleString()} ر.س</span><span class="badge ${q.status==='final'?'badge-success':'badge-warning'}">${q.status==='final'?'نهائي':'مسودة'}</span></div>
+      <div class="quote-actions"><button class="btn btn-outline btn-xs" onclick="viewQuote('${q.id}')">عرض</button><button class="btn btn-danger btn-xs" onclick="confirmDelete(()=>deleteQuote('${q.id}'),'حذف عرض ${q.customer}؟')">حذف</button></div>
+    </div>`).join('');
+}
+function deleteQuote(id){state.quotations=state.quotations.filter(x=>x.id!==id);saveState();renderQuotes();closeModal('confirmModal');toast('تم الحذف')}
+function viewQuote(id){
+  const q=state.quotations.find(x=>x.id===id);if(!q){toast('العرض غير موجود','error');return}
+  const ironRows=q.ironItems.map(i=>`<tr><td>${i.name}</td><td>${i.qty}</td><td>${i.unit}</td><td>${(+i.price).toLocaleString()}</td><td>${(i.qty*i.price).toLocaleString()}</td></tr>`).join('');
+  const costRows=q.costFields.filter(c=>c.invoice).map(c=>`<tr><td>${c.name}</td><td>${c.type==='fixed'?(+c.value).toLocaleString()+' ر.س':c.value+'%'}</td><td>${(+c.amount).toLocaleString()}</td></tr>`).join('');
+  const sn=q.structureTypeId?(state.structureTypes.find(s=>s.id===q.structureTypeId)?.name||''):'';
+  document.getElementById('invoiceContent').innerHTML=`
+    <div class="invoice">
+      <div class="invoice-header">
+        <div><div class="invoice-title">عرض سعر</div><div class="invoice-sub">ورشة صناعة الهياكل المعدنية<br>${q.date}</div></div>
+        <div style="text-align:left"><div style="font-size:1.05rem;font-weight:700">${q.customer}</div><div class="invoice-sub">${q.mode==='structure'?'حسب الهيكل: '+sn:'حسب أنواع الحديد'}</div></div>
+      </div>
+      <table><thead><tr><th>الصنف</th><th>الكمية</th><th>الوحدة</th><th>سعر الوحدة</th><th>الإجمالي</th></tr></thead><tbody>${ironRows}</tbody><tfoot><tr class="total-row"><td colspan="4">إجمالي الحديد</td><td>${q.ironTotal.toLocaleString()}</td></tr></tfoot></table>
+      ${costRows?`<table><thead><tr><th>الحقل</th><th>القيمة</th><th>المبلغ</th></tr></thead><tbody>${costRows}</tbody><tfoot><tr class="total-row"><td colspan="2">إجمالي الإضافات</td><td>${q.extraTotal.toLocaleString()}</td></tr></tfoot></table>`:''}
+      <div style="margin-top:16px;padding:18px;background:linear-gradient(135deg,var(--primary-deeper),var(--primary-dark));color:#fff;border-radius:var(--radius);display:flex;justify-content:space-between;font-size:1.2rem;font-weight:800"><span>الإجمالي الكلي</span><span>${q.total.toLocaleString()} ر.س</span></div>
+      <div class="invoice-footer"><span>${q.status==='final'?'عرض نهائي - ساري المفعول':'مسودة - للتعديل'}</span><span>شكراً لتعاملكم</span></div>
+    </div>`;
+  openModal('invoiceModal');
+}
+function previewInvoice(){
+  const c=document.getElementById('calcCustomer').value.trim()||'العميل';
+  const ironItems=[];
+  if(calcMode==='iron'){calcIronItems.forEach(item=>{const iron=state.ironTypes.find(x=>x.id===item.ironTypeId);if(iron&&item.qty>0)ironItems.push({name:iron.name,unit:iron.unit,price:iron.price,qty:item.qty})})}
+  else{calcStructureItems.forEach(item=>{const iron=state.ironTypes.find(x=>x.id===item.ironTypeId);if(iron&&item.qty>0)ironItems.push({name:iron.name,unit:iron.unit,price:iron.price,qty:item.qty})})}
+  let ironTotal=ironItems.reduce((s,i)=>s+i.qty*i.price,0);
+  let extraTotal=0;
+  const costRows=state.costFields.map(cf=>{const ov=calcCostOverrides[cf.id]||{value:cf.value,calc:false,invoice:true};let amt=0;if(ov.calc)amt=cf.type==='fixed'?ov.value:ironTotal*(ov.value/100);extraTotal+=amt;return{name:cf.name,type:cf.type,value:ov.value,invoice:ov.invoice,amount:amt}}).filter(c=>c.invoice);
+  const grandTotal=ironTotal+extraTotal;
+  const sn=calcMode==='structure'?(state.structureTypes.find(s=>s.id===document.getElementById('calcStructureSelect').value)?.name||''):'';
+  const today=new Date().toISOString().slice(0,10);
+  document.getElementById('invoiceContent').innerHTML=`
+    <div class="invoice">
+      <div class="invoice-header">
+        <div><div class="invoice-title">عرض سعر</div><div class="invoice-sub">ورشة صناعة الهياكل المعدنية<br>${today}</div></div>
+        <div style="text-align:left"><div style="font-size:1.05rem;font-weight:700">${c}</div><div class="invoice-sub">${calcMode==='structure'?'حسب الهيكل: '+sn:'حسب أنواع الحديد'}</div></div>
+      </div>
+      <table><thead><tr><th>الصنف</th><th>الكمية</th><th>الوحدة</th><th>سعر الوحدة</th><th>الإجمالي</th></tr></thead><tbody>${ironItems.map(i=>`<tr><td>${i.name}</td><td>${i.qty}</td><td>${i.unit}</td><td>${(+i.price).toLocaleString()}</td><td>${(i.qty*i.price).toLocaleString()}</td></tr>`).join('')||'<tr><td colspan="5" class="text-muted">لم يتم تحديد أصناف</td></tr>'}</tbody><tfoot><tr class="total-row"><td colspan="4">إجمالي الحديد</td><td>${ironTotal.toLocaleString()}</td></tr></tfoot></table>
+      ${costRows.length?`<table><thead><tr><th>الحقل</th><th>القيمة</th><th>المبلغ</th></tr></thead><tbody>${costRows.map(c=>`<tr><td>${c.name}</td><td>${c.type==='fixed'?(+c.value).toLocaleString()+' ر.س':c.value+'%'}</td><td>${(+c.amount).toLocaleString()}</td></tr>`).join('')}</tbody><tfoot><tr class="total-row"><td colspan="2">إجمالي الإضافات</td><td>${extraTotal.toLocaleString()}</td></tr></tfoot></table>`:''}
+      <div style="margin-top:16px;padding:18px;background:linear-gradient(135deg,var(--primary-deeper),var(--primary-dark));color:#fff;border-radius:var(--radius);display:flex;justify-content:space-between;font-size:1.2rem;font-weight:800"><span>الإجمالي الكلي</span><span>${grandTotal.toLocaleString()} ر.س</span></div>
+      <div class="invoice-footer"><span>عرض سعر للاطلاع</span><span>شكراً لتعاملكم</span></div>
+    </div>`;
+  openModal('invoiceModal');
+}
+
+// ===== MODALS =====
+function openModal(id){document.getElementById(id).classList.add('open')}
+function closeModal(id){document.getElementById(id).classList.remove('open')}
+document.querySelectorAll('.modal-overlay').forEach(m=>{m.addEventListener('click',function(e){if(e.target===this)this.classList.remove('open')})});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.modal-overlay.open').forEach(m=>m.classList.remove('open'))});
+function confirmDelete(cb,msg){document.getElementById('confirmMessage').textContent=msg||'هل أنت متأكد؟';confirmCallback=cb;document.getElementById('confirmBtn').onclick=()=>{if(confirmCallback)confirmCallback()};openModal('confirmModal')}
+
+// ===== DATA =====
+function exportData(){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(state,null,2)],{type:'application/json'}));a.download='حاسبة_الحديد_بيانات.json';a.click();toast('تم التصدير')}
+function importData(e){const file=e.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=function(ev){try{const d=JSON.parse(ev.target.result);if(!d.ironTypes||!d.structureTypes||!d.costFields){toast('ملف غير صالح','error');return}state=d;saveState();renderAll();toast('تم الاستيراد')}catch(e){toast('خطأ في الملف','error')}};reader.readAsText(file);e.target.value=''}
+function resetAll(){state=defaultState();saveState();calcIronItems=[{ironTypeId:'',qty:0}];calcCostOverrides={};calcStructureItems=[];renderAll();toast('تم إعادة التعيين')}
+function renderAll(){renderIronTypes();renderStructures();renderCostFields();renderDashboard();renderQuotes();if(!document.getElementById('tab-calculator').classList.contains('hidden'))initCalc()}
+
+// ===== INIT =====
+document.addEventListener('DOMContentLoaded',()=>{renderAll();initCalc()});
+</script>
+</body>
+</html>

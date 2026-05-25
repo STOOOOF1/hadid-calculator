@@ -2,426 +2,167 @@
 <html dir="rtl" lang="ar">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>قائمة المنتجات ومتوسط الأسعار</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>قائمة المنتجات</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{
-  font-family:'Segoe UI',Tahoma,sans-serif;
-  background:#f4f7fc;
-  color:#242b38;
-  padding:12px;
-  line-height:1.6;
+body{font-family:Tahoma,sans-serif;background:#f0f4fa;color:#222;padding:10px;line-height:1.5}
+.c{max-width:1100px;margin:0 auto}
+.h{background:#1e3a5f;color:#fff;padding:16px;border-radius:10px;text-align:center;margin-bottom:12px}
+.h h1{font-size:1.2rem}
+.h p{font-size:.78rem;opacity:.7}
+.s{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}
+.sd{background:#fff;border-radius:8px;padding:10px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,.05)}
+.sd .n{font-size:1.1rem;font-weight:700;color:#1e3a5f}
+.sd .l{font-size:.65rem;color:#888;margin-top:2px}
+.f{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap}
+.f input{flex:1;min-width:120px;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:.82rem;font-family:inherit}
+.f input:focus{outline:none;border-color:#1e3a5f}
+.f select{padding:8px 10px;border:1px solid #ddd;border-radius:6px;font-size:.8rem;font-family:inherit;background:#fff}
+.g{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px}
+.pc{background:#fff;border-radius:8px;padding:12px;box-shadow:0 1px 4px rgba(0,0,0,.04)}
+.pc .t{font-size:.85rem;font-weight:700;color:#1e3a5f}
+.pc .d{font-size:.72rem;color:#777;direction:ltr;text-align:left;margin:2px 0 4px}
+.pc .u{display:inline-block;background:#eef4fb;color:#1e3a5f;padding:1px 8px;border-radius:999px;font-size:.66rem;font-weight:600;margin-bottom:6px}
+.pc .r{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:4px}
+.pc .a{font-size:1rem;font-weight:800;color:#1e3a5f}
+.pc .x{font-size:.66rem;color:#999}
+.pc .x s{color:#555}
+.pc .nw{margin-top:6px;padding-top:6px;border-top:1px dashed #ddd;display:flex;gap:4px;align-items:center}
+.pc .nw input{flex:1;padding:5px 8px;border:1px solid #ddd;border-radius:5px;font-size:.74rem;font-family:inherit;background:#fafbfc;min-width:0}
+.pc .nw input:focus{border-color:#1e3a5f;background:#fff}
+.pc .nw input.s{border-color:#0a8;background:#ebfff5}
+.e{text-align:center;padding:40px;color:#999;font-size:.85rem}
+.ft{text-align:center;padding:16px 0;font-size:.68rem;color:#999}
+@media(max-width:500px){
+  .s{grid-template-columns:repeat(2,1fr)}
+  .g{grid-template-columns:1fr}
+  .h h1{font-size:1rem}
 }
-.container{max-width:1200px;margin:0 auto}
-.header{
-  background:linear-gradient(135deg,#1e3a5f,#15294a);
-  color:#fff;
-  padding:20px 24px;
-  border-radius:12px;
-  margin-bottom:16px;
-  text-align:center;
-}
-.header h1{font-size:1.4rem;margin-bottom:4px}
-.header p{font-size:.82rem;color:rgba(255,255,255,.65)}
-.sync-status{
-  display:inline-flex;
-  align-items:center;
-  gap:6px;
-  margin-top:8px;
-  padding:4px 14px;
-  border-radius:999px;
-  font-size:.72rem;
-  font-weight:600;
-  background:rgba(255,255,255,.1);
-  color:#fff;
-  cursor:pointer;
-  transition:background .2s;
-  border:1px solid rgba(255,255,255,.15);
-}
-.sync-status:hover{background:rgba(255,255,255,.18)}
-.sync-dot{
-  width:8px;height:8px;border-radius:50%;display:inline-block;
-}
-.sync-dot.online{background:#34d399}
-.sync-dot.offline{background:#f87171}
-.sync-dot.connecting{background:#fbbf24;animation:pulse 1s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-.stats{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(130px,1fr));
-  gap:10px;
-  margin-bottom:16px;
-}
-.stat-card{
-  background:#fff;
-  border-radius:10px;
-  padding:14px;
-  text-align:center;
-  box-shadow:0 2px 8px rgba(0,0,0,.04);
-  border:1px solid #eef1f5;
-}
-.stat-card .num{font-size:1.3rem;font-weight:700;color:#1e3a5f}
-.stat-card .label{font-size:.72rem;color:#8b97a8;margin-top:2px}
-.search-wrap{
-  margin-bottom:14px;
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-}
-.search-wrap input{
-  flex:1;
-  min-width:160px;
-  padding:9px 14px;
-  border:1.5px solid #d9dfe8;
-  border-radius:8px;
-  font-size:.85rem;
-  font-family:inherit;
-  background:#fff;
-}
-.search-wrap input:focus{outline:none;border-color:#2d5a8e;box-shadow:0 0 0 3px rgba(45,90,142,.1)}
-.search-wrap select{
-  padding:9px 12px;
-  border:1.5px solid #d9dfe8;
-  border-radius:8px;
-  font-size:.82rem;
-  font-family:inherit;
-  background:#fff;
-}
-.product-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
-  gap:12px;
-}
-.product-card{
-  background:#fff;
-  border-radius:10px;
-  padding:16px;
-  box-shadow:0 2px 8px rgba(0,0,0,.04);
-  border:1px solid #eef1f5;
-  transition:box-shadow .2s;
-}
-.product-name{font-size:.92rem;font-weight:700;color:#1e3a5f;margin-bottom:3px}
-.product-desc{font-size:.75rem;color:#6b7a8d;direction:ltr;text-align:left;margin-bottom:5px}
-.product-unit{
-  display:inline-flex;
-  align-items:center;
-  gap:4px;
-  background:#eef4fb;
-  color:#1e3a5f;
-  padding:2px 10px;
-  border-radius:999px;
-  font-size:.7rem;
-  font-weight:600;
-  margin-bottom:8px;
-}
-.product-details{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px}
-.product-avg{font-size:1.05rem;font-weight:800;color:#1e3a5f}
-.product-count{font-size:.7rem;color:#8b97a8}
-.product-count strong{color:#4f5b6c}
-.price-range{font-size:.7rem;color:#8b97a8}
-.note-wrap{margin-top:8px;padding-top:8px;border-top:1px dashed #d9dfe8;display:flex;gap:6px;align-items:center}
-.note-wrap .note-icon{font-size:.8rem;opacity:.4;flex-shrink:0}
-.note-wrap input{
-  flex:1;
-  padding:6px 10px;
-  border:1.5px solid #d9dfe8;
-  border-radius:6px;
-  font-size:.76rem;
-  font-family:inherit;
-  background:#fafbfc;
-  transition:border-color .2s,background .2s;
-  min-width:0;
-}
-.note-wrap input:focus{outline:none;border-color:#2d5a8e;background:#fff;box-shadow:0 0 0 3px rgba(45,90,142,.08)}
-.note-wrap input.saved{border-color:#0f7b4a;background:#ecfdf3}
-.save-badge{
-  font-size:.6rem;
-  padding:2px 6px;
-  border-radius:4px;
-  font-weight:600;
-  white-space:nowrap;
-  flex-shrink:0;
-  opacity:0;
-  transition:opacity .3s;
-}
-.save-badge.show{opacity:1}
-.save-badge.saved{color:#0f7b4a}
-.save-badge.saving{color:#d48c2b}
-.empty-state{text-align:center;padding:50px 20px;color:#8b97a8;font-size:.85rem}
-.footer{text-align:center;padding:20px 0;font-size:.72rem;color:#8b97a8}
 </style>
 </head>
 <body>
-<div class="container">
+<div class="c">
 
-<div class="header">
+<div class="h">
   <h1>قائمة المنتجات ومتوسط الأسعار</h1>
-  <p>جميع الأسعار بالريال السعودي - شركة النفيعي للحديد</p>
-  <div class="sync-status" id="syncStatus" onclick="connectToCloud()">
-    <span class="sync-dot connecting" id="syncDot"></span>
-    <span id="syncLabel">جارٍ الاتصال...</span>
-  </div>
+  <p>شركة النفيعي للحديد</p>
 </div>
 
-<div class="stats" id="stats"></div>
+<div class="s" id="s"></div>
 
-<div class="search-wrap">
-  <input type="text" id="searchInput" placeholder="بحث..." oninput="filterProducts()">
-  <select id="unitFilter" onchange="filterProducts()">
+<div class="f">
+  <input id="q" placeholder="بحث..." oninput="fl()">
+  <select id="uf" onchange="fl()">
     <option value="">الكل</option>
-    <option value="قطعة">قطعة</option>
-    <option value="كغم">كغم</option>
-    <option value="م²">م²</option>
-    <option value="متر">متر</option>
+    <option>قطعة</option><option>كغم</option><option>م²</option><option>متر</option>
   </select>
 </div>
 
-<div class="product-grid" id="productGrid"></div>
-<div class="empty-state" id="emptyState" style="display:none">لا توجد نتائج</div>
-<div class="footer">منتجات ورشة الهياكل المعدنية - بيانات التطبيق وفواتير النفيعي</div>
+<div class="g" id="g"></div>
+<div class="e" id="e" style="display:none">لا توجد نتائج</div>
+<div class="ft">منتجات ورشة الهياكل المعدنية</div>
 </div>
 
 <script>
-// ===== DATA =====
-const products = [
-  ["HEB عارضة 140×6000","HEB-S275JR Beams","قطعة",666,"657 - 685","6"],
+const P=[
+  ["HEB عارضة 140×6000","HEB-S275JR Beams","قطعة",666,"657-685","6"],
   ["IPE عارضة 400×12000","IPE-S275JR Beams","قطعة",2550,"2,550","1"],
   ["IPEAA عارضة 200×12000","IPEAA-Beams","قطعة",660,"660","1"],
   ["IPEAA وطني عارضة 100×6000","IPEAA-WATANI Beams","قطعة",115,"115","2"],
-  ["Round Bar 12مم × 6000","Round Bar A36","قطعة",20,"20","1"],
-  ["Round Bar 18مم × 6000 S275JR","Hot Rolled CS Round Bars S275JR","قطعة",71.65,"72","1"],
+  ["Round Bar 12مم×6000","Round Bar A36","قطعة",20,"20","1"],
+  ["Round Bar 18مم×6000","Hot Rolled CS Round Bars","قطعة",71.65,"72","1"],
   ["أنبوب مربع 100×100×6000","Square Tube A36","قطعة",634,"634","3"],
-  ["أنبوب مربع 30×30×6000 (2مم)","Square Tube A36","قطعة",37,"36 - 38","6"],
-  ["أنبوب مربع 40×40×6000 (2مم)","Square Tube A36","قطعة",48.5,"48 - 50","3"],
-  ["أنبوب مربع 40×40×6000 (3مم)","Square Tube A36","قطعة",72.5,"72 - 73","4"],
+  ["أنبوب مربع 30×30×6000 (2مم)","Square Tube A36","قطعة",37,"36-38","6"],
+  ["أنبوب مربع 40×40×6000 (2مم)","Square Tube A36","قطعة",48.5,"48-50","3"],
+  ["أنبوب مربع 40×40×6000 (3مم)","Square Tube A36","قطعة",72.5,"72-73","4"],
   ["أنبوب مربع 40×40×6000 (4مم)","Square Tube A36","قطعة",102,"102","3"],
-  ["أنبوب مربع 80×80×6000 (6مم)","Square Tube A36","قطعة",335.71,"330 - 340","7"],
-  ["أنبوب مستطيل 100×50×6000 (2مم)","Rectangular Tube A36","قطعة",94.64,"94 - 95","3"],
+  ["أنبوب مربع 80×80×6000 (6مم)","Square Tube A36","قطعة",335.71,"330-340","7"],
+  ["أنبوب مستطيل 100×50×6000 (2مم)","Rectangular Tube A36","قطعة",94.64,"94-95","3"],
   ["أنبوب مستطيل 100×50×6000 (4مم)","Rectangular Tube A36","قطعة",180,"180","7"],
   ["أنبوب مستطيل 40×20×6000","Rectangular Tube A36","قطعة",38,"38","1"],
-  ["أنبوب مستطيل 80×40×6000","Rectangular Tube A36","قطعة",73,"72 - 75","6"],
+  ["أنبوب مستطيل 80×40×6000","Rectangular Tube A36","قطعة",73,"72-75","6"],
   ["حديد تسليح 12مم","Rebar 12mm","كغم",850,"850","1"],
   ["حديد تسليح 8مم","Rebar 8mm","كغم",800,"800","1"],
   ["حديد زاوية 3×3","Equal Angles A36","متر",15000,"15,000","1"],
   ["زاوية 25×25×6000 (2.5مم)","Equal Angles A36","قطعة",22,"22","1"],
   ["زاوية 50×50×6000 (4مم)","Equal Angles A36","قطعة",60,"60","1"],
-  ["شريط مسطح 10×50×6000","Flat Bars A36","قطعة",81.33,"80 - 82","3"],
+  ["شريط مسطح 10×50×6000","Flat Bars A36","قطعة",81.33,"80-82","3"],
   ["شفة صاج 10×200×200","HR Plates Flanges","قطعة",15,"15","8"],
   ["صاج 3مم","HR Plates","م²",25000,"25,000","1"],
   ["صاج CHQ 1.8×1220×2440","CHQ Plates A36","قطعة",160,"160","1"],
-  ["صاج CHQ 3×1220×2440","CHQ Plates A36","قطعة",248.33,"245 - 250","3"],
-  ["صاج CHQ 4×1220×2440","CHQ Plates A36","قطعة",328.71,"324 - 335","7"],
+  ["صاج CHQ 3×1220×2440","CHQ Plates A36","قطعة",248.33,"245-250","3"],
+  ["صاج CHQ 4×1220×2440","CHQ Plates A36","قطعة",328.71,"324-335","7"],
   ["صاج HR 1.2×1000×2000","HR Plates A36","قطعة",50,"50","1"],
   ["صاج HR 1.8×1000×2000","HR Plates A36","قطعة",82,"82","3"],
-  ["صاج HR 1.8×1220×2440","HR Plates A36","قطعة",120.95,"119 - 122","3"],
+  ["صاج HR 1.8×1220×2440","HR Plates A36","قطعة",120.95,"119-122","3"],
   ["صاج HR 2×1000×2000","HR Plates A36","قطعة",95,"95","1"],
   ["صاج HR 3×1220×2440","HR Plates A36","قطعة",196,"196","1"],
-  ["مجرى UPE 100×6000","UPE-Channel S275JR","قطعة",167,"160 - 170","4"],
+  ["مجرى UPE 100×6000","UPE-Channel S275JR","قطعة",167,"160-170","4"],
   ["مجرى UPE 140×6000","UPE-Channel S275JR","قطعة",250,"250","1"],
-  ["مجرى UPN 100×50×6000","UPN-Channel S275JR","قطعة",210,"200 - 220","2"],
+  ["مجرى UPN 100×50×6000","UPN-Channel S275JR","قطعة",210,"200-220","2"],
   ["مجرى UPN 100×6000","UPN-Channel S275JR","قطعة",220,"220","2"],
-  ["مجرى UPN 120×6000","UPN-Channel S275JR","قطعة",254,"250 - 260","5"],
+  ["مجرى UPN 120×6000","UPN-Channel S275JR","قطعة",254,"250-260","5"],
   ["مجرى UPN 140×6000","UPN-Channel S275JR","قطعة",317,"317","3"],
-  ["مجرى UPN 40×20×6000","UPN-Channel S275JR","قطعة",78.63,"75 - 80","4"],
-  ["مجرى UPN 80×6000","UPN-Channel S275JR","قطعة",170,"160 - 180","6"],
+  ["مجرى UPN 40×20×6000","UPN-Channel S275JR","قطعة",78.63,"75-80","4"],
+  ["مجرى UPN 80×6000","UPN-Channel S275JR","قطعة",170,"160-180","6"],
   ["مواسير تجارية 2×4×6000","Commercial Pipes","قطعة",113,"113","1"],
 ];
 
-// ===== STATE =====
-let savedNotes = {};
-const LS_KEY = 'hadid_notes';
-const BLOB_ID_KEY = 'hadid_blob_id';
+let N={};
+try{let d=localStorage.getItem('n');if(d)N=JSON.parse(d)}catch(e){}
 
-function loadLocal() {
-  try {
-    const d = localStorage.getItem(LS_KEY);
-    if (d) savedNotes = JSON.parse(d);
-  } catch(e) {}
-}
+function fp(n){return n%1===0?n.toLocaleString():n.toFixed(2)}
 
-function saveLocal() {
-  try { localStorage.setItem(LS_KEY, JSON.stringify(savedNotes)); } catch(e) {}
-}
-
-function formatPrice(n) {
-  return n % 1 === 0 ? n.toLocaleString() : n.toFixed(2);
-}
-
-// ===== CLOUD SYNC (jsonblob.com) =====
-// لا يحتاج أي حساب. يعمل فوراً.
-const API = 'https://jsonblob.com/api/jsonBlob';
-let blobId = localStorage.getItem(BLOB_ID_KEY);
-let syncTimer = null;
-let connected = false;
-
-function setSyncStatus(state, label) {
-  const dot = document.getElementById('syncDot');
-  const lbl = document.getElementById('syncLabel');
-  dot.className = 'sync-dot ' + state;
-  lbl.textContent = label;
-  connected = state === 'online';
-}
-
-function connectToCloud() {
-  setSyncStatus('connecting', 'جارٍ الاتصال...');
-  
-  if (blobId) {
-    // Connect to existing blob
-    fetch(API + '/' + blobId)
-      .then(r => {
-        if (r.status === 404) {
-          blobId = null;
-          localStorage.removeItem(BLOB_ID_KEY);
-          connectToCloud();
-          return null;
-        }
-        return r.json();
-      })
-      .then(data => {
-        if (data) {
-          // Merge cloud data with local (local takes priority)
-          for (const [k, v] of Object.entries(data)) {
-            if (!savedNotes[k]) savedNotes[k] = v;
-          }
-          saveLocal();
-          render();
-          setSyncStatus('online', 'متصل - يتم التحديث فوراً');
-        }
-      })
-      .catch(() => {
-        setSyncStatus('offline', 'تعذر الاتصال - اضغط لإعادة المحاولة');
-      });
-  } else {
-    // Create new blob
-    fetch(API, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(savedNotes)
-    })
-      .then(r => {
-        const loc = r.headers.get('Location');
-        if (loc) blobId = loc.split('/').pop();
-        else {
-          // Extract from URL
-          const url = r.url || '';
-          const parts = url.split('/');
-          blobId = parts[parts.length - 1];
-        }
-        if (blobId) localStorage.setItem(BLOB_ID_KEY, blobId);
-        setSyncStatus('online', 'متصل - يتم التحديث فوراً');
-        render();
-      })
-      .catch(() => {
-        setSyncStatus('offline', 'تعذر الاتصال - اضغط لإعادة المحاولة');
-      });
-  }
-}
-
-function saveToCloud() {
-  if (!blobId || !connected) return;
-  if (syncTimer) clearTimeout(syncTimer);
-  syncTimer = setTimeout(() => {
-    fetch(API + '/' + blobId, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(savedNotes)
-    }).catch(() => {});
-  }, 600);
-}
-
-function pollCloud() {
-  if (!blobId || !connected) return;
-  fetch(API + '/' + blobId)
-    .then(r => r.ok ? r.json() : null)
-    .then(data => {
-      if (data) {
-        let changed = false;
-        for (const [k, v] of Object.entries(data)) {
-          if (savedNotes[k] !== v) {
-            savedNotes[k] = v;
-            changed = true;
-          }
-        }
-        if (changed) {
-          saveLocal();
-          render();
-        }
-      }
-    })
-    .catch(() => {});
-}
-
-// ===== RENDER =====
-function render() {
-  const grid = document.getElementById('productGrid');
-  grid.innerHTML = products.map((p) => {
-    const key = p[0];
-    const note = savedNotes[key] || '';
-    const cls = note ? 'saved' : '';
-    return `
-    <div class="product-card" data-name="${key}" data-unit="${p[2]}">
-      <div class="product-name">${key}</div>
-      <div class="product-desc">${p[1]}</div>
-      <div class="product-unit">${p[2]}</div>
-      <div class="product-details">
-        <div class="product-avg">${formatPrice(p[3])} ر.س</div>
-        <div>
-          <div class="product-count"><strong>${p[5]}</strong> مصدر</div>
-          <div class="price-range">${p[4]} ر.س</div>
-        </div>
+function R(){
+  const g=document.getElementById('g');
+  g.innerHTML=P.map(p=>{
+    const k=p[0],v=N[k]||'',c=v?'s':'';
+    return `<div class="pc" data-n="${k}" data-u="${p[2]}">
+      <div class="t">${k}</div>
+      <div class="d">${p[1]}</div>
+      <div class="u">${p[2]}</div>
+      <div class="r">
+        <div class="a">${fp(p[3])} ر.س</div>
+        <div class="x"><s>${p[5]}</s> مصدر <br>${p[4]} ر.س</div>
       </div>
-      <div class="note-wrap">
-        <span class="note-icon">✏️</span>
-        <input class="note-input ${cls}" type="text" placeholder="التسمية في الورشة..." value="${note}" data-key="${key}">
-        <span class="save-badge ${note ? 'saved show' : ''}" id="badge-${key.replace(/\s/g,'_')}">${note ? '✓' : ''}</span>
+      <div class="nw">
+        <input class="${c}" placeholder="التسمية في الورشة..." value="${v}" data-k="${k}">
       </div>
     </div>`;
   }).join('');
 
-  document.getElementById('stats').innerHTML = `
-    <div class="stat-card"><div class="num">${products.length}</div><div class="label">إجمالي المنتجات</div></div>
-    <div class="stat-card"><div class="num">${products.reduce((s, p) => s + parseInt(p[5]), 0)}</div><div class="label">قيمة سعرية</div></div>
-    <div class="stat-card"><div class="num">${new Set(products.map(p => p[2])).size}</div><div class="label">وحدات</div></div>
-    <div class="stat-card"><div class="num">${formatPrice(products.reduce((s, p) => s + p[3], 0))}</div><div class="label">مجموع المتوسط</div></div>`;
+  document.getElementById('s').innerHTML=`
+    <div class="sd"><div class="n">${P.length}</div><div class="l">منتج</div></div>
+    <div class="sd"><div class="n">${P.reduce((s,p)=>s+ +p[5],0)}</div><div class="l">سعر</div></div>
+    <div class="sd"><div class="n">${new Set(P.map(p=>p[2])).size}</div><div class="l">وحدة</div></div>
+    <div class="sd"><div class="n">${fp(P.reduce((s,p)=>s+p[3],0))}</div><div class="l">إجمالي</div></div>`;
 
-  document.querySelectorAll('.note-input').forEach(inp => {
-    inp.addEventListener('change', function() {
-      const key = this.dataset.key;
-      const val = this.value.trim();
-      if (val) savedNotes[key] = val;
-      else delete savedNotes[key];
-      saveLocal();
-      saveToCloud();
-      this.classList.toggle('saved', !!val);
-      const badge = document.getElementById('badge-' + key.replace(/\s/g,'_'));
-      if (badge) {
-        badge.textContent = val ? '✓' : '';
-        badge.classList.toggle('show', !!val);
-      }
+  document.querySelectorAll('.nw input').forEach(i=>{
+    i.addEventListener('change',function(){
+      const k=this.dataset.k,v=this.value.trim();
+      if(v)N[k]=v;else delete N[k];
+      try{localStorage.setItem('n',JSON.stringify(N))}catch(e){}
+      this.classList.toggle('s',!!v);
     });
   });
 }
 
-function filterProducts() {
-  const q = document.getElementById('searchInput').value.trim().toLowerCase();
-  const u = document.getElementById('unitFilter').value;
-  const cards = document.querySelectorAll('.product-card');
-  let v = 0;
-  cards.forEach(c => {
-    const m = !q || c.getAttribute('data-name').toLowerCase().includes(q);
-    const mu = !u || c.getAttribute('data-unit') === u;
-    c.style.display = m && mu ? '' : 'none';
-    if (m && mu) v++;
+function fl(){
+  const q=document.getElementById('q').value.trim().toLowerCase();
+  const u=document.getElementById('uf').value;
+  const c=document.querySelectorAll('.pc');
+  let v=0;
+  c.forEach(x=>{
+    const m=!q||x.dataset.n.toLowerCase().includes(q);
+    const mu=!u||x.dataset.u===u;
+    x.style.display=m&&mu?'':'none';
+    if(m&&mu)v++;
   });
-  document.getElementById('emptyState').style.display = v === 0 ? '' : 'none';
+  document.getElementById('e').style.display=v===0?'':'none';
 }
 
-// ===== INIT =====
-loadLocal();
-render();
-connectToCloud();
-setInterval(pollCloud, 10000);
+R();
 </script>
 </body>
 </html>

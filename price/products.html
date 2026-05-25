@@ -10,77 +10,99 @@ body{
   font-family:'Segoe UI',Tahoma,sans-serif;
   background:#f4f7fc;
   color:#242b38;
-  padding:16px;
+  padding:12px;
   line-height:1.6;
 }
 .container{max-width:1200px;margin:0 auto}
 .header{
   background:linear-gradient(135deg,#1e3a5f,#15294a);
   color:#fff;
-  padding:24px 28px;
+  padding:20px 24px;
   border-radius:12px;
-  margin-bottom:20px;
+  margin-bottom:16px;
   text-align:center;
 }
-.header h1{font-size:1.5rem;margin-bottom:4px}
-.header p{font-size:.85rem;color:rgba(255,255,255,.65)}
+.header h1{font-size:1.4rem;margin-bottom:4px}
+.header p{font-size:.82rem;color:rgba(255,255,255,.65)}
+.sync-status{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  margin-top:8px;
+  padding:4px 14px;
+  border-radius:999px;
+  font-size:.72rem;
+  font-weight:600;
+  background:rgba(255,255,255,.1);
+  color:#fff;
+  cursor:pointer;
+  transition:background .2s;
+  border:1px solid rgba(255,255,255,.15);
+}
+.sync-status:hover{background:rgba(255,255,255,.18)}
+.sync-dot{
+  width:8px;height:8px;border-radius:50%;display:inline-block;
+}
+.sync-dot.online{background:#34d399}
+.sync-dot.offline{background:#f87171}
+.sync-dot.connecting{background:#fbbf24;animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 .stats{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
-  gap:12px;
-  margin-bottom:20px;
+  grid-template-columns:repeat(auto-fit,minmax(130px,1fr));
+  gap:10px;
+  margin-bottom:16px;
 }
 .stat-card{
   background:#fff;
   border-radius:10px;
-  padding:16px;
+  padding:14px;
   text-align:center;
   box-shadow:0 2px 8px rgba(0,0,0,.04);
   border:1px solid #eef1f5;
 }
-.stat-card .num{font-size:1.4rem;font-weight:700;color:#1e3a5f}
-.stat-card .label{font-size:.75rem;color:#8b97a8;margin-top:2px}
+.stat-card .num{font-size:1.3rem;font-weight:700;color:#1e3a5f}
+.stat-card .label{font-size:.72rem;color:#8b97a8;margin-top:2px}
 .search-wrap{
-  margin-bottom:16px;
+  margin-bottom:14px;
   display:flex;
   gap:8px;
   flex-wrap:wrap;
 }
 .search-wrap input{
   flex:1;
-  min-width:180px;
-  padding:10px 16px;
-  border:1.5px solid #d9dfe8;
-  border-radius:8px;
-  font-size:.88rem;
-  font-family:inherit;
-  background:#fff;
-}
-.search-wrap input:focus{outline:none;border-color:#2d5a8e;box-shadow:0 0 0 3px rgba(45,90,142,.1)}
-.search-wrap select{
-  padding:10px 14px;
+  min-width:160px;
+  padding:9px 14px;
   border:1.5px solid #d9dfe8;
   border-radius:8px;
   font-size:.85rem;
   font-family:inherit;
   background:#fff;
 }
+.search-wrap input:focus{outline:none;border-color:#2d5a8e;box-shadow:0 0 0 3px rgba(45,90,142,.1)}
+.search-wrap select{
+  padding:9px 12px;
+  border:1.5px solid #d9dfe8;
+  border-radius:8px;
+  font-size:.82rem;
+  font-family:inherit;
+  background:#fff;
+}
 .product-grid{
   display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(340px,1fr));
-  gap:14px;
+  grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
+  gap:12px;
 }
 .product-card{
   background:#fff;
   border-radius:10px;
-  padding:18px;
+  padding:16px;
   box-shadow:0 2px 8px rgba(0,0,0,.04);
   border:1px solid #eef1f5;
-  transition:box-shadow .2s,transform .15s;
+  transition:box-shadow .2s;
 }
-.product-card:hover{box-shadow:0 6px 20px rgba(0,0,0,.06);transform:translateY(-2px)}
-.product-name{font-size:.95rem;font-weight:700;color:#1e3a5f;margin-bottom:4px}
-.product-desc{font-size:.78rem;color:#6b7a8d;direction:ltr;text-align:left;margin-bottom:6px}
+.product-name{font-size:.92rem;font-weight:700;color:#1e3a5f;margin-bottom:3px}
+.product-desc{font-size:.75rem;color:#6b7a8d;direction:ltr;text-align:left;margin-bottom:5px}
 .product-unit{
   display:inline-flex;
   align-items:center;
@@ -89,41 +111,45 @@ body{
   color:#1e3a5f;
   padding:2px 10px;
   border-radius:999px;
-  font-size:.72rem;
+  font-size:.7rem;
   font-weight:600;
-  margin-bottom:10px;
+  margin-bottom:8px;
 }
-.product-details{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
-.product-avg{font-size:1.1rem;font-weight:800;color:#1e3a5f}
-.product-count{font-size:.72rem;color:#8b97a8}
+.product-details{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px}
+.product-avg{font-size:1.05rem;font-weight:800;color:#1e3a5f}
+.product-count{font-size:.7rem;color:#8b97a8}
 .product-count strong{color:#4f5b6c}
-.price-range{font-size:.72rem;color:#8b97a8}
-.note-wrap{margin-top:10px;padding-top:10px;border-top:1px dashed #d9dfe8}
-.note-wrap label{display:block;font-size:.7rem;color:#8b97a8;margin-bottom:4px;font-weight:600}
+.price-range{font-size:.7rem;color:#8b97a8}
+.note-wrap{margin-top:8px;padding-top:8px;border-top:1px dashed #d9dfe8;display:flex;gap:6px;align-items:center}
+.note-wrap .note-icon{font-size:.8rem;opacity:.4;flex-shrink:0}
 .note-wrap input{
-  width:100%;
-  padding:7px 10px;
+  flex:1;
+  padding:6px 10px;
   border:1.5px solid #d9dfe8;
   border-radius:6px;
-  font-size:.78rem;
+  font-size:.76rem;
   font-family:inherit;
   background:#fafbfc;
-  transition:border-color .2s;
+  transition:border-color .2s,background .2s;
+  min-width:0;
 }
 .note-wrap input:focus{outline:none;border-color:#2d5a8e;background:#fff;box-shadow:0 0 0 3px rgba(45,90,142,.08)}
 .note-wrap input.saved{border-color:#0f7b4a;background:#ecfdf3}
-.empty-state{text-align:center;padding:60px 20px;color:#8b97a8;font-size:.9rem}
-.footer{text-align:center;padding:24px 0;font-size:.75rem;color:#8b97a8}
-.toast{
-  position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
-  padding:10px 24px;border-radius:8px;font-size:.8rem;font-weight:600;
-  box-shadow:0 8px 30px rgba(0,0,0,.15);z-index:999;
-  transition:opacity .3s;pointer-events:none;
+.save-badge{
+  font-size:.6rem;
+  padding:2px 6px;
+  border-radius:4px;
+  font-weight:600;
+  white-space:nowrap;
+  flex-shrink:0;
+  opacity:0;
+  transition:opacity .3s;
 }
-.toast.show{opacity:1}
-.toast-success{background:#0f7b4a;color:#fff}
-.toast-error{background:#b42318;color:#fff}
-.toast-info{background:#1e3a5f;color:#fff}
+.save-badge.show{opacity:1}
+.save-badge.saved{color:#0f7b4a}
+.save-badge.saving{color:#d48c2b}
+.empty-state{text-align:center;padding:50px 20px;color:#8b97a8;font-size:.85rem}
+.footer{text-align:center;padding:20px 0;font-size:.72rem;color:#8b97a8}
 </style>
 </head>
 <body>
@@ -132,14 +158,18 @@ body{
 <div class="header">
   <h1>قائمة المنتجات ومتوسط الأسعار</h1>
   <p>جميع الأسعار بالريال السعودي - شركة النفيعي للحديد</p>
+  <div class="sync-status" id="syncStatus" onclick="connectToCloud()">
+    <span class="sync-dot connecting" id="syncDot"></span>
+    <span id="syncLabel">جارٍ الاتصال...</span>
+  </div>
 </div>
 
 <div class="stats" id="stats"></div>
 
 <div class="search-wrap">
-  <input type="text" id="searchInput" placeholder="بحث عن منتج..." oninput="filterProducts()">
+  <input type="text" id="searchInput" placeholder="بحث..." oninput="filterProducts()">
   <select id="unitFilter" onchange="filterProducts()">
-    <option value="">جميع الوحدات</option>
+    <option value="">الكل</option>
     <option value="قطعة">قطعة</option>
     <option value="كغم">كغم</option>
     <option value="م²">م²</option>
@@ -148,16 +178,12 @@ body{
 </div>
 
 <div class="product-grid" id="productGrid"></div>
-
-<div class="empty-state" id="emptyState" style="display:none">لا توجد نتائج لبحثك</div>
-
-<div class="footer">تم إعداد قائمة المنتجات والأسعار من بيانات التطبيق وفواتير شركة النفيعي للحديد</div>
+<div class="empty-state" id="emptyState" style="display:none">لا توجد نتائج</div>
+<div class="footer">منتجات ورشة الهياكل المعدنية - بيانات التطبيق وفواتير النفيعي</div>
 </div>
 
-<div class="toast" id="toast"></div>
-
 <script>
-// ===== PRODUCTS DATA =====
+// ===== DATA =====
 const products = [
   ["HEB عارضة 140×6000","HEB-S275JR Beams","قطعة",666,"657 - 685","6"],
   ["IPE عارضة 400×12000","IPE-S275JR Beams","قطعة",2550,"2,550","1"],
@@ -202,98 +228,137 @@ const products = [
   ["مواسير تجارية 2×4×6000","Commercial Pipes","قطعة",113,"113","1"],
 ];
 
-// ===== CLOUD STORAGE (jsonblob.com - no signup required) =====
-// أول مرة يدخل فيها أحد، يتم إنشاء blob جديد.
-// كل التعديلات تحفظ فوراً ويتم تحديثها للجميع خلال ثوان.
-const BLOB_STORAGE_KEY = 'hadid_notes_blob_id';
-let blobId = localStorage.getItem(BLOB_STORAGE_KEY);
+// ===== STATE =====
 let savedNotes = {};
-let syncTimer = null;
-let pendingSave = false;
+const LS_KEY = 'hadid_notes';
+const BLOB_ID_KEY = 'hadid_blob_id';
 
-const API = 'https://jsonblob.com/api/jsonBlob';
+function loadLocal() {
+  try {
+    const d = localStorage.getItem(LS_KEY);
+    if (d) savedNotes = JSON.parse(d);
+  } catch(e) {}
+}
 
-function showToast(msg, type) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.className = 'toast show toast-' + (type || 'success');
-  setTimeout(() => t.classList.remove('show'), 2000);
+function saveLocal() {
+  try { localStorage.setItem(LS_KEY, JSON.stringify(savedNotes)); } catch(e) {}
 }
 
 function formatPrice(n) {
   return n % 1 === 0 ? n.toLocaleString() : n.toFixed(2);
 }
 
-// Load notes from cloud
-function loadNotes() {
-  if (!blobId) {
-    // أول مرة - نشئ blob جديد
+// ===== CLOUD SYNC (jsonblob.com) =====
+// لا يحتاج أي حساب. يعمل فوراً.
+const API = 'https://jsonblob.com/api/jsonBlob';
+let blobId = localStorage.getItem(BLOB_ID_KEY);
+let syncTimer = null;
+let connected = false;
+
+function setSyncStatus(state, label) {
+  const dot = document.getElementById('syncDot');
+  const lbl = document.getElementById('syncLabel');
+  dot.className = 'sync-dot ' + state;
+  lbl.textContent = label;
+  connected = state === 'online';
+}
+
+function connectToCloud() {
+  setSyncStatus('connecting', 'جارٍ الاتصال...');
+  
+  if (blobId) {
+    // Connect to existing blob
+    fetch(API + '/' + blobId)
+      .then(r => {
+        if (r.status === 404) {
+          blobId = null;
+          localStorage.removeItem(BLOB_ID_KEY);
+          connectToCloud();
+          return null;
+        }
+        return r.json();
+      })
+      .then(data => {
+        if (data) {
+          // Merge cloud data with local (local takes priority)
+          for (const [k, v] of Object.entries(data)) {
+            if (!savedNotes[k]) savedNotes[k] = v;
+          }
+          saveLocal();
+          render();
+          setSyncStatus('online', 'متصل - يتم التحديث فوراً');
+        }
+      })
+      .catch(() => {
+        setSyncStatus('offline', 'تعذر الاتصال - اضغط لإعادة المحاولة');
+      });
+  } else {
+    // Create new blob
     fetch(API, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({})
+      body: JSON.stringify(savedNotes)
     })
-    .then(r => {
-      if (!r.ok) throw new Error('فشل الإنشاء');
-      // استخرج id من الرابط
-      const location = r.headers.get('Location') || r.url;
-      blobId = location.split('/').pop();
-      localStorage.setItem(BLOB_STORAGE_KEY, blobId);
-      render();
-    })
-    .catch(e => {
-      showToast('⚠️ تعذر الاتصال بالسحاب - تعمل بشكل محلي', 'error');
-      render();
-    });
-    return;
+      .then(r => {
+        const loc = r.headers.get('Location');
+        if (loc) blobId = loc.split('/').pop();
+        else {
+          // Extract from URL
+          const url = r.url || '';
+          const parts = url.split('/');
+          blobId = parts[parts.length - 1];
+        }
+        if (blobId) localStorage.setItem(BLOB_ID_KEY, blobId);
+        setSyncStatus('online', 'متصل - يتم التحديث فوراً');
+        render();
+      })
+      .catch(() => {
+        setSyncStatus('offline', 'تعذر الاتصال - اضغط لإعادة المحاولة');
+      });
   }
-
-  fetch(API + '/' + blobId)
-  .then(r => {
-    if (r.status === 404) {
-      // blob محذوف - ننشئ جديد
-      localStorage.removeItem(BLOB_STORAGE_KEY);
-      blobId = null;
-      loadNotes();
-      return null;
-    }
-    return r.json();
-  })
-  .then(data => {
-    if (data) {
-      savedNotes = data;
-      render();
-    }
-  })
-  .catch(e => {
-    // نتجاهل خطأ الاتصال ونعرض البيانات بدون سحاب
-    render();
-  });
 }
 
-// Save notes to cloud (مع debounce)
-function saveNotesToCloud() {
-  if (!blobId) return;
+function saveToCloud() {
+  if (!blobId || !connected) return;
   if (syncTimer) clearTimeout(syncTimer);
   syncTimer = setTimeout(() => {
     fetch(API + '/' + blobId, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(savedNotes)
-    })
-    .then(r => {
-      if (r.ok) pendingSave = false;
-    })
-    .catch(e => {});
-  }, 500);
+    }).catch(() => {});
+  }, 600);
 }
 
+function pollCloud() {
+  if (!blobId || !connected) return;
+  fetch(API + '/' + blobId)
+    .then(r => r.ok ? r.json() : null)
+    .then(data => {
+      if (data) {
+        let changed = false;
+        for (const [k, v] of Object.entries(data)) {
+          if (savedNotes[k] !== v) {
+            savedNotes[k] = v;
+            changed = true;
+          }
+        }
+        if (changed) {
+          saveLocal();
+          render();
+        }
+      }
+    })
+    .catch(() => {});
+}
+
+// ===== RENDER =====
 function render() {
   const grid = document.getElementById('productGrid');
   grid.innerHTML = products.map((p) => {
     const key = p[0];
     const note = savedNotes[key] || '';
-    const savedClass = note ? 'saved' : '';
+    const cls = note ? 'saved' : '';
     return `
     <div class="product-card" data-name="${key}" data-unit="${p[2]}">
       <div class="product-name">${key}</div>
@@ -307,79 +372,56 @@ function render() {
         </div>
       </div>
       <div class="note-wrap">
-        <label>ملاحظة (التسمية الشائعة في الورشة)</label>
-        <input class="note-input ${savedClass}" type="text" placeholder="..." value="${note}" data-key="${key}">
+        <span class="note-icon">✏️</span>
+        <input class="note-input ${cls}" type="text" placeholder="التسمية في الورشة..." value="${note}" data-key="${key}">
+        <span class="save-badge ${note ? 'saved show' : ''}" id="badge-${key.replace(/\s/g,'_')}">${note ? '✓' : ''}</span>
       </div>
     </div>`;
   }).join('');
 
-  // Stats
-  const total = products.reduce((s, p) => s + p[3], 0);
   document.getElementById('stats').innerHTML = `
     <div class="stat-card"><div class="num">${products.length}</div><div class="label">إجمالي المنتجات</div></div>
     <div class="stat-card"><div class="num">${products.reduce((s, p) => s + parseInt(p[5]), 0)}</div><div class="label">قيمة سعرية</div></div>
-    <div class="stat-card"><div class="num">${new Set(products.map(p => p[2])).size}</div><div class="label">وحدات قياس</div></div>
-    <div class="stat-card"><div class="num">${formatPrice(total)}</div><div class="label">مجموع متوسط الأسعار</div></div>`;
+    <div class="stat-card"><div class="num">${new Set(products.map(p => p[2])).size}</div><div class="label">وحدات</div></div>
+    <div class="stat-card"><div class="num">${formatPrice(products.reduce((s, p) => s + p[3], 0))}</div><div class="label">مجموع المتوسط</div></div>`;
 
-  // Attach note save handlers
   document.querySelectorAll('.note-input').forEach(inp => {
     inp.addEventListener('change', function() {
       const key = this.dataset.key;
       const val = this.value.trim();
       if (val) savedNotes[key] = val;
       else delete savedNotes[key];
+      saveLocal();
+      saveToCloud();
       this.classList.toggle('saved', !!val);
-      saveNotesToCloud();
-      showToast('✓ تم الحفظ لجميع المستخدمين');
+      const badge = document.getElementById('badge-' + key.replace(/\s/g,'_'));
+      if (badge) {
+        badge.textContent = val ? '✓' : '';
+        badge.classList.toggle('show', !!val);
+      }
     });
   });
 }
 
 function filterProducts() {
-  const search = document.getElementById('searchInput').value.trim().toLowerCase();
-  const unit = document.getElementById('unitFilter').value;
+  const q = document.getElementById('searchInput').value.trim().toLowerCase();
+  const u = document.getElementById('unitFilter').value;
   const cards = document.querySelectorAll('.product-card');
-  let visible = 0;
+  let v = 0;
   cards.forEach(c => {
-    const name = c.getAttribute('data-name').toLowerCase();
-    const unitVal = c.getAttribute('data-unit');
-    const matchSearch = !search || name.includes(search);
-    const matchUnit = !unit || unitVal === unit;
-    c.style.display = matchSearch && matchUnit ? '' : 'none';
-    if (matchSearch && matchUnit) visible++;
+    const m = !q || c.getAttribute('data-name').toLowerCase().includes(q);
+    const mu = !u || c.getAttribute('data-unit') === u;
+    c.style.display = m && mu ? '' : 'none';
+    if (m && mu) v++;
   });
-  document.getElementById('emptyState').style.display = visible === 0 ? '' : 'none';
+  document.getElementById('emptyState').style.display = v === 0 ? '' : 'none';
 }
 
-// ===== جلب التحديثات من المستخدمين الآخرين كل 10 ثوان =====
-function pollUpdates() {
-  if (!blobId) return;
-  fetch(API + '/' + blobId)
-    .then(r => r.ok ? r.json() : null)
-    .then(data => {
-      if (data) {
-        // دمج مع التعديلات المحلية المعلقة
-        let changed = false;
-        for (const [k, v] of Object.entries(data)) {
-          if (savedNotes[k] !== v) {
-            savedNotes[k] = v;
-            changed = true;
-          }
-        }
-        if (changed) {
-          render();
-          showToast('↻ تم تحديث الملاحظات من المستخدمين الآخرين', 'info');
-        }
-      }
-    })
-    .catch(() => {});
-}
-
-// Start
-loadNotes();
-
-// Poll every 12 seconds for other users' changes
-setInterval(pollUpdates, 12000);
+// ===== INIT =====
+loadLocal();
+render();
+connectToCloud();
+setInterval(pollCloud, 10000);
 </script>
 </body>
 </html>

@@ -154,7 +154,28 @@ body{
 
 <div class="toast" id="toast"></div>
 
+<!-- ===== Firebase SDK (Realtime Database) ===== -->
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
+
 <script>
+// ===== FIREBASE CONFIG =====
+// استبدل هذا الكائن بإعدادات مشروع Firebase الخاص بك
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT.firebaseapp.com",
+  databaseURL: "https://YOUR_PROJECT-default-rtdb.firebaseio.com",
+  projectId: "YOUR_PROJECT",
+  storageBucket: "YOUR_PROJECT.appspot.com",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId: "YOUR_APP_ID"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+const notesRef = db.ref('productNotes');
+
+// ===== PRODUCTS DATA =====
 const products = [
   ["HEB عارضة 140×6000","HEB-S275JR Beams","قطعة",666,"657 - 685","6"],
   ["IPE عارضة 400×12000","IPE-S275JR Beams","قطعة",2550,"2,550","1"],
@@ -199,17 +220,8 @@ const products = [
   ["مواسير تجارية 2×4×6000","Commercial Pipes","قطعة",113,"113","1"],
 ];
 
-// Load notes from localStorage
-const STORAGE_KEY = 'productNotes_price';
+// ===== STATE =====
 let savedNotes = {};
-try {
-  const d = localStorage.getItem(STORAGE_KEY);
-  if (d) savedNotes = JSON.parse(d);
-} catch(e) {}
-
-function saveNoteToStorage() {
-  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(savedNotes)); } catch(e) {}
-}
 
 function showToast(msg) {
   const t = document.getElementById('toast');
@@ -227,7 +239,7 @@ function render() {
   grid.innerHTML = products.map((p, i) => {
     const key = p[0];
     const note = savedNotes[key] || '';
-    const savedClass = savedNotes[key] !== undefined && savedNotes[key] !== '' ? 'saved' : '';
+    const savedClass = note ? 'saved' : '';
     return `
     <div class="product-card" data-name="${key}" data-unit="${p[2]}">
       <div class="product-name">${key}</div>
@@ -260,11 +272,8 @@ function render() {
     inp.addEventListener('change', function() {
       const key = this.dataset.key;
       const val = this.value.trim();
-      if (val) savedNotes[key] = val;
-      else delete savedNotes[key];
-      saveNoteToStorage();
-      this.classList.toggle('saved', !!val);
-      showToast('✓ تم حفظ الملاحظة');
+      // Save to Firebase (triggers onValue which updates all clients)
+      notesRef.child(key.replace(/[.#$\/\[\]]/g, '_')).set(val || null);
     });
   });
 }
@@ -284,6 +293,29 @@ function filterProducts() {
   });
   document.getElementById('emptyState').style.display = visible === 0 ? '' : 'none';
 }
+
+// ===== FIREBASE REAL-TIME SYNC =====
+// Listen for changes from any client
+notesRef.on('value', (snapshot) => {
+  const data = snapshot.val() || {};
+  // Convert Firebase keys back (remove underscore encoding)
+  savedNotes = {};
+  // Build reverse lookup: map sanitized key -> original product name
+  const sanitizedToOriginal = {};
+  products.forEach(p => {
+    const sk = p[0].replace(/[.#$\/\[\]]/g, '_');
+    sanitizedToOriginal[sk] = p[0];
+  });
+  for (const [sk, val] of Object.entries(data)) {
+    const original = sanitizedToOriginal[sk];
+    if (original && val) savedNotes[original] = val;
+  }
+  render();
+  showToast('↻ تم تحديث الملاحظات');
+}, (error) => {
+  console.error('Firebase error:', error);
+  showToast('⚠️ خطأ في الاتصال بقاعدة البيانات');
+});
 
 render();
 </script>

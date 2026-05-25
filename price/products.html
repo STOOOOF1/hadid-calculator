@@ -8,9 +8,14 @@
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Tahoma,sans-serif;background:#f0f4fa;color:#222;padding:10px;line-height:1.5}
 .c{max-width:1100px;margin:0 auto}
-.h{background:#1e3a5f;color:#fff;padding:16px;border-radius:10px;text-align:center;margin-bottom:12px}
+.h{background:#1e3a5f;color:#fff;padding:16px;border-radius:10px;text-align:center;margin-bottom:12px;position:relative}
 .h h1{font-size:1.2rem}
 .h p{font-size:.78rem;opacity:.7}
+.st{position:absolute;left:12px;top:50%;transform:translateY(-50%);display:flex;align-items:center;gap:4px;font-size:.65rem;padding:3px 10px;border-radius:999px;background:rgba(255,255,255,.12);cursor:pointer}
+.st .q{width:7px;height:7px;border-radius:50%;display:inline-block}
+.st .q.g{background:#34d399}
+.st .q.r{background:#ef4444}
+.st .q.y{background:#f59e0b}
 .s{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}
 .sd{background:#fff;border-radius:8px;padding:10px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,.05)}
 .sd .n{font-size:1.1rem;font-weight:700;color:#1e3a5f}
@@ -47,6 +52,10 @@ body{font-family:Tahoma,sans-serif;background:#f0f4fa;color:#222;padding:10px;li
 <div class="h">
   <h1>قائمة المنتجات ومتوسط الأسعار</h1>
   <p>شركة النفيعي للحديد</p>
+  <div class="st" id="st" onclick="conn()">
+    <span class="q y" id="q"></span>
+    <span id="sl">...</span>
+  </div>
 </div>
 
 <div class="s" id="s"></div>
@@ -112,6 +121,47 @@ const P=[
 let N={};
 try{let d=localStorage.getItem('n');if(d)N=JSON.parse(d)}catch(e){}
 
+const API='https://jsonblob.com/api/jsonBlob';
+let bid=localStorage.getItem('bid');
+let online=false;
+
+function sts(c,t){
+  document.getElementById('q').className='q '+c;
+  document.getElementById('sl').textContent=t;
+  online=c==='g';
+}
+
+function conn(){
+  sts('y','جاري...');
+  if(bid){
+    fetch(API+'/'+bid).then(r=>{
+      if(r.status===404){bid=null;localStorage.removeItem('bid');conn();return null}
+      return r.json();
+    }).then(d=>{
+      if(d){
+        let ch=false;
+        for(const[k,v]of Object.entries(d)){if(!N[k]){N[k]=v;ch=true}}
+        for(const[k,v]of Object.entries(N)){if(d[k]!==v){d[k]=v;ch=true}}
+        if(ch){saveCloud();local();R()}
+        sts('g','متزامن');
+      }
+    }).catch(()=>sts('r','اضغط للتوصيل'));
+  }else{
+    fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(N)})
+    .then(r=>{
+      bid=(r.headers.get('Location')||'').split('/').pop();
+      if(bid){localStorage.setItem('bid',bid);sts('g','متزامن')}
+    }).catch(()=>sts('r','اضغط للتوصيل'));
+  }
+}
+
+function saveCloud(){
+  if(!bid||!online)return;
+  fetch(API+'/'+bid,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(N)}).catch(()=>{});
+}
+
+function local(){try{localStorage.setItem('n',JSON.stringify(N))}catch(e){}}
+
 function fp(n){return n%1===0?n.toLocaleString():n.toFixed(2)}
 
 function R(){
@@ -122,13 +172,8 @@ function R(){
       <div class="t">${k}</div>
       <div class="d">${p[1]}</div>
       <div class="u">${p[2]}</div>
-      <div class="r">
-        <div class="a">${fp(p[3])} ر.س</div>
-        <div class="x"><s>${p[5]}</s> مصدر <br>${p[4]} ر.س</div>
-      </div>
-      <div class="nw">
-        <input class="${c}" placeholder="التسمية في الورشة..." value="${v}" data-k="${k}">
-      </div>
+      <div class="r"><div class="a">${fp(p[3])} ر.س</div><div class="x"><s>${p[5]}</s> مصدر<br>${p[4]} ر.س</div></div>
+      <div class="nw"><input class="${c}" placeholder="التسمية في الورشة..." value="${v}" data-k="${k}"></div>
     </div>`;
   }).join('');
 
@@ -142,7 +187,7 @@ function R(){
     i.addEventListener('change',function(){
       const k=this.dataset.k,v=this.value.trim();
       if(v)N[k]=v;else delete N[k];
-      try{localStorage.setItem('n',JSON.stringify(N))}catch(e){}
+      local();saveCloud();
       this.classList.toggle('s',!!v);
     });
   });
@@ -162,7 +207,22 @@ function fl(){
   document.getElementById('e').style.display=v===0?'':'none';
 }
 
+function poll(){
+  if(!bid||!online)return;
+  fetch(API+'/'+bid).then(r=>r.ok?r.json():null).then(d=>{
+    if(d){
+      let ch=false;
+      for(const[k,v]of Object.entries(d)){
+        if(N[k]!==v){N[k]=v;ch=true}
+      }
+      if(ch){local();R()}
+    }
+  }).catch(()=>{});
+}
+
 R();
+conn();
+setInterval(poll,8000);
 </script>
 </body>
 </html>
